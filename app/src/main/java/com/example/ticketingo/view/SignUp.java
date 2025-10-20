@@ -1,0 +1,75 @@
+package com.example.ticketingo.view;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.example.ticketingo.R;
+import com.example.ticketingo.viewmodel.AuthViewModel;
+
+public class SignUp extends AppCompatActivity {
+
+    private AuthViewModel viewModel;
+    private EditText emailInput,nameInput, passwordInput;
+    private Button  registerButton;
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (viewModel != null && viewModel.getUser().getValue() != null) {
+            // user is already logged in, skip login
+            startActivity(new Intent(SignUp.this, MainActivity.class));
+            finish();
+        }
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_sign_up);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+        emailInput = findViewById(R.id.emailInput);
+        passwordInput = findViewById(R.id.passwordInput);
+        nameInput= findViewById(R.id.nameInput);
+        registerButton = findViewById(R.id.registerButton);
+        viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+
+        viewModel.getUser().observe(this, user ->{
+            if(user!=null){
+                Toast.makeText(this,"Welcome" + user.getEmail(),Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+            }
+        });
+
+        viewModel.getError().observe(this, error ->
+                Toast.makeText(this, "Error: " + error, Toast.LENGTH_SHORT).show()
+        );
+
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                String useremail = emailInput.getText().toString();
+                String userpass = passwordInput.getText().toString();
+                String username = nameInput.getText().toString();
+                viewModel.register(useremail,userpass,username);
+
+            }
+        });
+    }
+}
