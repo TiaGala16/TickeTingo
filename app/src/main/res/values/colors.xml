@@ -5,4 +5,6 @@
     <color name="bg_colour">#161A1D</color>
     <color name="flex_card_bg">#AA6886</color>
     <color name="blood_red">#A4161A</color>
+    <color name="input_field_bg">#1AFFFFFF</color>
+    <color name="btn_color">#C551A5</color>
 </resources>
