@@ -5,8 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BookEvent"
-    android:background="@color/bg_colour">
+    android:background="@color/bg_colour"
+    tools:context=".view.BookEventActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card"
@@ -16,7 +16,6 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="30dp"
-        android:background="@color/flex_card_bg"
         android:padding="20dp"
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -66,7 +65,7 @@
                 android:layout_weight="2"
                 android:text="Detail"
                 android:textColor="@color/white" />
-<!--                android:textAlignment="center"-->
+            <!--                android:textAlignment="center"-->
 
 
             <TextView
@@ -81,5 +80,4 @@
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

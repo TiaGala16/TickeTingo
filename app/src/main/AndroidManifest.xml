@@ -12,9 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TickeTingo">
         <activity
-            android:name=".view.AdminDashboardActivity"
+            android:name=".view.BookEventActivity"
             android:exported="false" />
-        <!-- <activity -->
+        <activity
+            android:name=".view.AdminDashboardActivity"
+            android:exported="false" /> <!-- <activity -->
         <!-- android:name=".view.LogIn" -->
         <!-- android:exported="false" /> -->
         <activity
