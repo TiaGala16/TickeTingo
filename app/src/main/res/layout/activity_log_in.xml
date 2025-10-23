@@ -39,9 +39,9 @@
 
         <Button
             android:id="@+id/btnSignup"
-            android:text="Go to SignUp Page"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="Sign Page" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
