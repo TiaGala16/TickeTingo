@@ -23,7 +23,7 @@
                 android:id="@+id/eventName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="35dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginBottom="10dp"
                 android:ems="10"
                 android:hint="Name of the Event"
@@ -37,11 +37,12 @@
                 android:id="@+id/DateEvent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="35dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
                 android:ems="10"
                 android:hint="Enter the Date"
                 android:inputType="text"
+                android:textColor="#FFFF"
                 android:textColorHint="#FFFF"
                 tools:layout_editor_absoluteX="84dp"
                 tools:layout_editor_absoluteY="108dp" />
@@ -50,18 +51,19 @@
                 android:id="@+id/spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="35dp" />
+                android:layout_marginTop="20dp" />
 
             <EditText
                 android:id="@+id/eventPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="35dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
                 android:ems="10"
                 android:hint="Enter the Price"
                 android:inputType="numberDecimal"
                 android:textColorHint="#FFFF"
+                android:textColor="#FFFF"
                 tools:layout_editor_absoluteX="94dp"
                 tools:layout_editor_absoluteY="295dp" />
 
@@ -69,21 +71,47 @@
                 android:id="@+id/InfoEvent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="35dp"
+                android:layout_marginTop="20dp"
                 android:ems="10"
                 android:hint="Enter information about the Event"
                 android:inputType="text"
+                android:textColor="#FFFF"
                 android:textColorHint="#FFFF" />
 
             <EditText
                 android:id="@+id/totalticket"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="35dp"
+                android:layout_marginTop="20dp"
                 android:ems="10"
                 android:hint="Enter total no of Tickets"
                 android:inputType="number"
+                android:textColor="#FFFF"
                 android:textColorHint="#FFFF" />
+
+            <Button
+                android:id="@+id/selectImageBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Upload the image" />
+            <ImageView
+                android:id="@+id/eventImage"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:scaleType="centerCrop"
+                android:contentDescription="Event image preview"
+                android:src="@drawable/ic_launcher_background" />
+
+            <Button
+                android:id="@+id/createBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="35dp"
+                android:text="Create Event" />
+
         </LinearLayout>
     </ScrollView>
 

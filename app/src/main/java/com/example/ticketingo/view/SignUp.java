@@ -67,7 +67,15 @@ public class SignUp extends AppCompatActivity {
                 String useremail = emailInput.getText().toString();
                 String userpass = passwordInput.getText().toString();
                 String username = nameInput.getText().toString();
-                viewModel.register(useremail,userpass,username);
+
+                if(!useremail.endsWith("@nmims.in")){
+                    Toast.makeText(SignUp.this,"Please enter a valid NMIMS mail ID",Toast.LENGTH_SHORT).show();
+                }
+
+                else{
+                    viewModel.register(useremail,userpass,username);
+                }
+
 
             }
         });
