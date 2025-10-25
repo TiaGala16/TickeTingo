@@ -46,9 +46,10 @@ public class MainActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
         eventList = new ArrayList<>();
-        eventList.add(new Event("Cultural Night", "4th September 2025", "GDSC", "Free", R.drawable.fantastic_four));
-        eventList.add(new Event("Music Fest", "10th October 2025", "College Union", "₹100.0", R.drawable.fantastic_four));
-        eventList.add(new Event("Tech Expo", "15th November 2025", "Tech Club", "₹250.0", R.drawable.fantastic_four));
+        String imageUrl = "android.resource://" + getPackageName() + "/" + R.drawable.fantastic_four;
+        eventList.add(new Event("Cultural Night", "4th September 2025", "GDSC", 0, imageUrl));
+        eventList.add(new Event("Music Fest", "10th October 2025", "College Union", 100.0,imageUrl));
+        eventList.add(new Event("Tech Expo", "15th November 2025", "Tech Club", 250.0,imageUrl));
 
         adapter = new EventAdapter(this, eventList);
         recyclerView.setAdapter(adapter);

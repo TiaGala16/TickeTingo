@@ -16,13 +16,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ticketingo.R;
 import com.example.ticketingo.viewmodel.AuthViewModel;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LogIn extends AppCompatActivity {
 
     private AuthViewModel viewModel;
     private EditText emailIn, passwordIn;
-    private Button btnLogin, btnSignup;
+    private Button btnLogin, btnSignup,btnForgotPassword;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +38,7 @@ public class LogIn extends AppCompatActivity {
         passwordIn = findViewById(R.id.passwordIn);
         btnLogin = findViewById(R.id.btnLogin);
         btnSignup = findViewById(R.id.btnSignup);
+        btnForgotPassword = findViewById(R.id.btnForgotPassword);
         viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
         viewModel.getUser().observe(this, user ->{
@@ -80,6 +82,27 @@ public class LogIn extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(LogIn.this, SignUp.class);
                 startActivity(intent);
+            }
+        });
+
+        btnForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email = emailIn.getText().toString().trim();
+
+                if(email.isEmpty()) {
+                    Toast.makeText(LogIn.this, "Please enter your email", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(LogIn.this,"Password reset email sent!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(LogIn.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
 

@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ticketingo.view.MainActivity;
+import com.bumptech.glide.Glide;
 import com.example.ticketingo.R;
 import com.example.ticketingo.model.Event;
 
@@ -25,7 +25,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 //    this.eventList = eventList;
 //    }
 
-    public EventAdapter(MainActivity context, List<Event> eventList) {
+    public EventAdapter(Context context, List<Event> eventList) {
         this.context =context;
         this.eventList = eventList;
     }
@@ -44,8 +44,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.title.setText(event.getTitle());
         holder.date.setText(event.getDate());
         holder.organiser.setText("Organised by: " + event.getOrganiser());
-        holder.price.setText(event.getPrice());
-        holder.image.setImageResource(event.getImageResId());
+        holder.price.setText("₹" +event.getPrice());
+
+        Glide.with(context).load(event.getImageURL()).error(R.drawable.fantastic_four).into(holder.image);
     }
 
     @Override
