@@ -34,7 +34,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     @Override
     public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 // In EventAdapter.onCreateViewHolder(), make sure you're using:
-        View view = LayoutInflater.from(context).inflate(R.layout.admin_homepage, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.event_card_item, parent, false);
         return new EventViewHolder(view);
     }
 

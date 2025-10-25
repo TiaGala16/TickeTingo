@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">TickeTingo</string>
+    <string name="forgot_password_text"><u>Forgot Password?</u></string>
+    <string name="signup_text"><u>Signup</u></string>
+    <string name="google_text"><u>Sign In with Google</u></string>
+    <style name="CircleImageStyle">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+    <string name="profile_icon_description">User profile settings</string>
+    <string name="committee_icon_description">Icon representing an organizing committee</string>
+
+
 </resources>

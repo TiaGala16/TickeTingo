@@ -7,4 +7,6 @@
     <color name="blood_red">#A4161A</color>
     <color name="input_field_bg">#1AFFFFFF</color>
     <color name="btn_color">#C551A5</color>
-</resources>
+    <color name="primary_background">#161A1D</color>
+    <color name="circle_accent">#402E39</color>
+    <color name="circle_outline_accent">#805C3D4A</color> </resources>
