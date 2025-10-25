@@ -30,12 +30,9 @@ public class CloudinaryManager {
     // Initialize Cloudinary once
     public void init(Context context) {
         if (!initialized) {
-            Log.d("inside CouldinaryManager" , "this is an instance of CouldinaryManager");
             Map<String, String> config = new HashMap<>();
             config.put("cloud_name", BuildConfig.CLOUDINARY_CLOUD_NAME);
             config.put("api_key", BuildConfig.CLOUDINARY_API_KEY);
-//            config.put("api_secret", "YOUR_API_SECRET");
-            Log.d("CouldinaryManager" , "the api received in CouldinaryManager");
             MediaManager.init(context.getApplicationContext(), config);
             initialized = true;
         }
@@ -45,10 +42,6 @@ public class CloudinaryManager {
         if (!initialized) {
             throw new IllegalStateException("CloudinaryManager not initialized! Call init(context) first.");
         }
-
-        Log.d("CloudinaryManager", "Starting image upload...");
-        Log.d("CloudinaryManager", "Cloudinary Cloud Name: " + BuildConfig.CLOUDINARY_CLOUD_NAME);
-        Log.d("CloudinaryManager", "Cloudinary API Key: " + BuildConfig.CLOUDINARY_API_KEY);
 
         MediaManager.get()
                 .upload(imageUri)

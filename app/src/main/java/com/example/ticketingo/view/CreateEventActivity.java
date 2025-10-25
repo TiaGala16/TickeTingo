@@ -1,7 +1,9 @@
 package com.example.ticketingo.view;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -23,6 +25,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.ticketingo.R;
 import com.example.ticketingo.viewmodel.EventViewModel;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class CreateEventActivity extends AppCompatActivity {
@@ -38,8 +41,26 @@ public class CreateEventActivity extends AppCompatActivity {
     private final ActivityResultLauncher<String> imagePicker =
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
                 if (uri != null) {
-                    imageUri = uri;
-                    eventImage.setImageURI(uri);
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                        int width = bitmap.getWidth();
+                        int height = bitmap.getHeight();
+                        float ratio = (float) width / height;
+
+                        Log.d("ImageCheck", "Width: " + width + " Height: " + height + " Ratio: " + ratio);
+
+                        // Check if ratio is roughly 2:1 (allowing tiny float margin)
+                        if (ratio >= 1.55f && ratio <= 2.3f) {
+                            imageUri = uri;
+                            eventImage.setImageURI(uri);
+                            Toast.makeText(this, "Image accepted ✅", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(this, "Please select an image with a 2:1 ratio", Toast.LENGTH_SHORT).show();
+                        }
+                    }catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
     @Override

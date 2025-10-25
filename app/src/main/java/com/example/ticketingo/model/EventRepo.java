@@ -14,8 +14,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.cloudinary.android.callback.UploadCallback;
 import com.cloudinary.android.callback.ErrorInfo;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -23,21 +26,20 @@ public class EventRepo {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final MutableLiveData<Boolean> uploadStatus = new MutableLiveData<>();
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<Event>> eventsLiveData = new MutableLiveData<>();
 
+    public MutableLiveData<List<Event>> getEventsLiveData() {return eventsLiveData;}
     public MutableLiveData<Boolean> getUploadStatus() { return uploadStatus; }
     public MutableLiveData<String> getErrorLiveData() { return errorLiveData; }
 
     public void createEvent(Context context, String title, String description,String organiser,
                             String date, double price, int totalTickets, Uri imageUri) {
-        Log.d("EventRepo", " did we even receive the image????");
         if (imageUri == null) {
-            Log.d("EventRepo", " did we even receive the image????");
             errorLiveData.setValue("Image is required");
             return;
         }
 
         CloudinaryManager.getInstance().init(context);
-        Log.d("Event" , "did the api come back in EventRepo?");
         //This part is for uploading the image in Cloudinary
 
         CloudinaryManager.getInstance().uploadImage(imageUri, new UploadCallback() {
@@ -93,5 +95,23 @@ public class EventRepo {
         db.collection("Events").document(eventid).set(event)
                 .addOnSuccessListener(aVoid -> uploadStatus.setValue(true))
                 .addOnFailureListener(e -> errorLiveData.setValue(e.getMessage()));
+    }
+
+    public void loadEvents(){
+db.collection("Events").orderBy("date").addSnapshotListener(
+        (queryDocumentSnapshots, error)->{
+            if (error != null) {
+                Log.e("EventRepo", "Error loading the events", error);
+                return;
+            }
+            if(queryDocumentSnapshots!=null){
+                List<Event> eventList = new ArrayList<>();
+                for(QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                    Event event = doc.toObject(Event.class);
+                    eventList.add(event);
+                }
+                eventsLiveData.setValue(eventList);
+            }
+        });
     }
 }

@@ -20,7 +20,7 @@ import com.example.ticketingo.viewmodel.AuthViewModel;
 public class SignUp extends AppCompatActivity {
 
     private AuthViewModel viewModel;
-    private EditText emailInput,nameInput, passwordInput;
+    private EditText emailInput,nameInput,confirmPasswordInput, passwordInput;
     private Button  registerButton;
     @Override
     protected void onStart() {
@@ -42,6 +42,7 @@ public class SignUp extends AppCompatActivity {
             return insets;
         });
         emailInput = findViewById(R.id.emailInput);
+        confirmPasswordInput =findViewById(R.id.confirmPasswordInput);
         passwordInput = findViewById(R.id.passwordInput);
         nameInput= findViewById(R.id.nameInput);
         registerButton = findViewById(R.id.registerButton);
@@ -67,14 +68,23 @@ public class SignUp extends AppCompatActivity {
                 String useremail = emailInput.getText().toString();
                 String userpass = passwordInput.getText().toString();
                 String username = nameInput.getText().toString();
+                String confirmpass = confirmPasswordInput.getText().toString();
+
+                if (username.isEmpty() || useremail.isEmpty() || userpass.isEmpty() || confirmpass.isEmpty()) {
+                    Toast.makeText(SignUp.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 if(!useremail.endsWith("@nmims.in")){
                     Toast.makeText(SignUp.this,"Please enter a valid NMIMS mail ID",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!confirmpass.equals(userpass)) {
+                    Toast.makeText(SignUp.this, "The Passwords do not match", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
-                else{
                     viewModel.register(useremail,userpass,username);
-                }
 
 
             }
