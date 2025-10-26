@@ -14,6 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TickeTingo">
         <activity
+            android:name=".view.CommitteeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.CommitteeActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.ForgotPasswordActivity"
             android:exported="false" />
         <activity

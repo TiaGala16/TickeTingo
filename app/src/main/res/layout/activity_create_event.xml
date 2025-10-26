@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -8,123 +9,171 @@
     android:layout_height="match_parent"
     tools:context=".view.CreateEventActivity">
 
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp">
+        android:layout_height="match_parent">
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:padding="32dp">
 
+            <!-- Title -->
+
+            <TextView
+                android:id="@+id/createEventTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Create Event"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:textColor="#E49AF7"
+                android:gravity="center"
+                android:layout_marginTop="50dp" />
+
+            <!-- Subtitle -->
+            <TextView
+                android:id="@+id/createEventSubtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Fill in the details below to create a new event"
+                android:textColor="#B3FFFFFF"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="30dp" />
+
+            <!-- Event Name -->
             <EditText
                 android:id="@+id/eventName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="10dp"
-                android:ems="10"
-                android:hint="Name of the Event"
-                android:inputType="text"
-                android:textColor="#FFFF"
-                android:textColorHint="#FFFF"
-                tools:layout_editor_absoluteX="76dp"
-                tools:layout_editor_absoluteY="30dp" />
+                android:layout_height="55dp"
+                android:hint="Event Name"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#99FFFFFF"
+                android:background="@color/input_field_bg"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:layout_marginBottom="16dp" />
 
+            <!-- Event Date -->
             <EditText
                 android:id="@+id/DateEvent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
-                android:ems="10"
-                android:hint="Enter the Date"
-                android:inputType="text"
-                android:textColor="#FFFF"
-                android:textColorHint="#FFFF"
-                tools:layout_editor_absoluteX="84dp"
-                tools:layout_editor_absoluteY="108dp" />
+                android:layout_height="55dp"
+                android:hint="Event Date"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#99FFFFFF"
+                android:background="@color/input_field_bg"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:layout_marginBottom="16dp" />
 
+            <!-- Event Time -->
             <EditText
                 android:id="@+id/TimeEvent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
-                android:hint="Enter the Time"
-                android:textColor="#FFFF"
-                android:textColorHint="#FFFF"
-                android:inputType="text" />
+                android:layout_height="55dp"
+                android:hint="Event Time"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#99FFFFFF"
+                android:background="@color/input_field_bg"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:layout_marginBottom="16dp" />
 
+            <!-- Committee Spinner -->
             <Spinner
                 android:id="@+id/spinner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp" />
+                android:layout_height="55dp"
+                android:background="@color/input_field_bg"
+                android:layout_marginBottom="16dp"
+                android:paddingStart="10dp" />
 
+            <!-- Price -->
             <EditText
                 android:id="@+id/eventPrice"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
-                android:ems="10"
-                android:hint="Enter the Price"
+                android:layout_height="55dp"
+                android:hint="Ticket Price (₹)"
                 android:inputType="numberDecimal"
-                android:textColorHint="#FFFF"
-                android:textColor="#FFFF"
-                tools:layout_editor_absoluteX="94dp"
-                tools:layout_editor_absoluteY="295dp" />
+                android:textColor="#FFFFFF"
+                android:textColorHint="#99FFFFFF"
+                android:background="@color/input_field_bg"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:layout_marginBottom="16dp" />
 
+            <!-- Info -->
             <EditText
                 android:id="@+id/InfoEvent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:ems="10"
-                android:hint="Enter information about the Event"
-                android:inputType="text"
-                android:textColor="#FFFF"
-                android:textColorHint="#FFFF" />
+                android:layout_height="120dp"
+                android:hint="Event Description"
+                android:gravity="top|start"
+                android:inputType="textMultiLine"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#99FFFFFF"
+                android:background="@color/input_field_bg"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp" />
 
+            <!-- Total Tickets -->
+
+            <!-- Upload Image Button -->
             <EditText
                 android:id="@+id/totalticket"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:ems="10"
-                android:hint="Enter total no of Tickets"
+                android:layout_height="55dp"
+                android:layout_marginBottom="24dp"
+                android:background="@color/input_field_bg"
+                android:hint="Total Tickets"
                 android:inputType="number"
-                android:textColor="#FFFF"
-                android:textColorHint="#FFFF" />
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#99FFFFFF" />
 
             <Button
                 android:id="@+id/selectImageBtn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Upload the image" />
+                android:layout_height="55dp"
+                android:text="Upload Event Image"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:background="@color/btn_color"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Image Preview -->
             <ImageView
                 android:id="@+id/eventImage"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="20dp"
                 android:scaleType="centerCrop"
                 android:contentDescription="Event image preview"
-                android:src="@drawable/ic_launcher_background" />
+                android:src="@drawable/ic_launcher_background"
+                android:layout_marginBottom="32dp"
+                android:background="@drawable/rounded_border_bg" />
 
+            <!-- Create Button -->
             <Button
                 android:id="@+id/createBtn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="35dp"
-                android:text="Create Event" />
+                android:layout_height="55dp"
+                android:text="Create Event"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:fontFamily="sans-serif-medium"
+                android:background="@color/btn_color"
+                android:layout_marginBottom="40dp" />
+
+
 
         </LinearLayout>
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
