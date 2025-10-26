@@ -20,10 +20,6 @@ import java.util.List;
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
     private Context context;
     private List<Event> eventList;
-//    public EventAdapter(Context context , List<Event> eventList){
-//    this.context =context;
-//    this.eventList = eventList;
-//    }
 
     public EventAdapter(Context context, List<Event> eventList) {
         this.context =context;
@@ -33,7 +29,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     @NonNull
     @Override
     public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-// In EventAdapter.onCreateViewHolder(), make sure you're using:
         View view = LayoutInflater.from(context).inflate(R.layout.admin_homepage, parent, false);
         return new EventViewHolder(view);
     }

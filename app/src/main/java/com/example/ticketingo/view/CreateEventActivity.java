@@ -1,5 +1,8 @@
 package com.example.ticketingo.view;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,16 +28,19 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.ticketingo.R;
 import com.example.ticketingo.viewmodel.EventViewModel;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class CreateEventActivity extends AppCompatActivity {
 
-    private EditText eventName,DateEvent,eventPrice,InfoEvent,totalticket;
+    private EditText eventName,DateEvent,eventPrice,TimeEvent,InfoEvent,totalticket;
     private Button selectImageBtn,createBtn;
     private Spinner spinner;
     private ImageView eventImage;
-
+    String timer = "";
+    String dates ="";
     private Uri imageUri;
     private EventViewModel viewModel;
 
@@ -53,7 +59,7 @@ public class CreateEventActivity extends AppCompatActivity {
                         if (ratio >= 1.55f && ratio <= 2.3f) {
                             imageUri = uri;
                             eventImage.setImageURI(uri);
-                            Toast.makeText(this, "Image accepted ✅", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Image accepted ", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(this, "Please select an image with a 2:1 ratio", Toast.LENGTH_SHORT).show();
                         }
@@ -78,6 +84,7 @@ public class CreateEventActivity extends AppCompatActivity {
         eventPrice = findViewById(R.id.eventPrice);
         totalticket = findViewById(R.id.totalticket);
         InfoEvent = findViewById(R.id.InfoEvent);
+        TimeEvent = findViewById(R.id.TimeEvent);
         spinner = findViewById(R.id.spinner);
         eventImage = findViewById(R.id.eventImage);
         selectImageBtn = findViewById(R.id.selectImageBtn);
@@ -103,6 +110,44 @@ public class CreateEventActivity extends AppCompatActivity {
                 imagePicker.launch("image/*");
             }
         });
+        DateEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Calendar calendar = Calendar.getInstance();
+                int year =calendar.get(Calendar.YEAR) ;
+                int month =calendar.get(Calendar.MONTH);
+                int day =calendar.get(Calendar.DAY_OF_MONTH);
+
+
+                DatePickerDialog datepickerdialog = new DatePickerDialog(
+                        CreateEventActivity.this,(v,Selectedyear, Selectedmonth, Selectedyday) ->
+                {
+                    dates= Selectedyday +"/ " +(Selectedmonth+1) +"/ " +Selectedyear;
+                    DateEvent.setText(dates);
+                },
+                        year,month,day
+                );
+                datepickerdialog.show();
+            }
+            });
+
+        TimeEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Calendar calendar = Calendar.getInstance();
+                int hr = calendar.get(Calendar.HOUR);
+                int min = calendar.get(Calendar.MINUTE);
+
+                TimePickerDialog timepickerdialog = new TimePickerDialog(
+                        CreateEventActivity.this,(  v , selectedhour , selectedminute)->{
+                    timer = selectedhour + ": " + selectedminute;
+                    TimeEvent.setText(timer);
+                } ,
+                        hr, min,true
+                );
+                timepickerdialog.show();
+            }
+        });
 
         createBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +155,7 @@ public class CreateEventActivity extends AppCompatActivity {
                 Log.d("CreateEventActivity", "Create button clicked!");
                 String title = eventName.getText().toString().trim();
                 String desc = InfoEvent.getText().toString().trim();
+                String time = TimeEvent.getText().toString().trim();
                 String date = DateEvent.getText().toString().trim();
                 String inputOrg = spinner.getSelectedItem().toString();
                 double price = Double.parseDouble(eventPrice.getText().toString().trim());
@@ -120,7 +166,7 @@ public class CreateEventActivity extends AppCompatActivity {
                     return;
                 }
 
-                viewModel.createEvent(CreateEventActivity.this, title, desc,inputOrg, date, price, totalTickets, imageUri);
+                viewModel.createEvent(CreateEventActivity.this, title, desc,time,inputOrg, date, price, totalTickets, imageUri);
             }
         });
         viewModel.getUploadStatus().observe(this, success -> {

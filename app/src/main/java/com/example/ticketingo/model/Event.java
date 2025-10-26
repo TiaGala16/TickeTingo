@@ -5,6 +5,7 @@ import com.google.firebase.firestore.PropertyName;
 public class Event {
     private String title;
     private String date;
+    private String time;
     private String organiser;
     private double price;
     private String description;
@@ -30,7 +31,13 @@ public class Event {
     public void setTitle(String title) {
         this.title = title;
     }
+    public String getTime() {
+        return time;
+    }
 
+    public void setTime(String time) {
+        this.time = time;
+    }
     public String getDate() {
         return date;
     }

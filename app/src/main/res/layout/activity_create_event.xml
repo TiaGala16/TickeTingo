@@ -47,6 +47,18 @@
                 tools:layout_editor_absoluteX="84dp"
                 tools:layout_editor_absoluteY="108dp" />
 
+            <EditText
+                android:id="@+id/TimeEvent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:hint="Enter the Time"
+                android:textColor="#FFFF"
+                android:textColorHint="#FFFF"
+                android:inputType="text" />
+
             <Spinner
                 android:id="@+id/spinner"
                 android:layout_width="match_parent"

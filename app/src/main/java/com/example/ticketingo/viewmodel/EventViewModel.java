@@ -13,17 +13,10 @@ import java.util.List;
 
 public class EventViewModel extends ViewModel {
     private final EventRepo repo=new EventRepo();
-    //    private final LiveData<List<Event>> events;
-//
-//    public EventViewModel(){
-//        repo =new EventRepo();
-//        events = repo.getEventsLiveData();
-//        repo.loadEvents;
-//    }
 
-    public void createEvent(Context context, String title, String description,String organiser,
+    public void createEvent(Context context, String title, String description,String time,String organiser,
                             String date, double price, int totalTickets, Uri imageUri) {
-        repo.createEvent(context, title, description, organiser,date, price, totalTickets, imageUri);
+        repo.createEvent(context, title, description,time, organiser,date, price, totalTickets, imageUri);
     }
 
     public void loadEvents(){
