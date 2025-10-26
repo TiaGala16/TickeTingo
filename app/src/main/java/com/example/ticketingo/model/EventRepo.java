@@ -132,6 +132,28 @@ public class EventRepo {
         });
     }
 
+    public void loadEventsByOrganiser(String organiserName) {
+        db.collection("Events")
+                // Filter the events by the 'organiser' field which is the committee name
+                .whereEqualTo("organiser", organiserName)
+                .addSnapshotListener((queryDocumentSnapshots, error) -> {
+                    if (error != null) {
+                        Log.e("EventRepo", "Error loading events by organiser", error);
+                        errorLiveData.setValue("Failed to load events for " + organiserName);
+                        return;
+                    }
+                    if (queryDocumentSnapshots != null) {
+                        List<Event> eventList = new ArrayList<>();
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            Event event = doc.toObject(Event.class);
+                            eventList.add(event);
+                        }
+                        // Reuse the sorting logic
+                        List<Event> upcomingEvents = getUpcomingSortedEvents(eventList);
+                        eventsLiveData.setValue(upcomingEvents);
+                    }
+                });
+    }
     private List<Event> getUpcomingSortedEvents(List<Event> eventList) {
         Date today = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());

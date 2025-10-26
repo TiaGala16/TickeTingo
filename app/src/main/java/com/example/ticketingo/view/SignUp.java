@@ -86,7 +86,6 @@ public class SignUp extends AppCompatActivity {
 
                     viewModel.register(useremail,userpass,username);
 
-
             }
         });
     }
