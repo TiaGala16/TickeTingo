@@ -43,41 +43,51 @@ public class EventRepo {
             errorLiveData.setValue("Image is required");
             return;
         }
+        db.collection("Events")
+                .whereEqualTo("title", title.trim())
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (!querySnapshot.isEmpty()) {
+                        // Duplicate found
+                        errorLiveData.setValue("An event with this name already exists!");
+                    } else {
 
-        CloudinaryManager.getInstance().init(context);
-        //This part is for uploading the image in Cloudinary
+                        CloudinaryManager.getInstance().init(context);
+                        //This part is for uploading the image in Cloudinary
 
-        CloudinaryManager.getInstance().uploadImage(imageUri, new UploadCallback() {
-            @Override
-            public void onStart(String requestId) {
-                Log.d("EventRepo", "Upload started...");
+                        CloudinaryManager.getInstance().uploadImage(imageUri, new UploadCallback() {
+                            @Override
+                            public void onStart(String requestId) {
+                                Log.d("EventRepo", "Upload started...");
 
-            }
+                            }
 
-            @Override
-            public void onProgress(String requestId, long bytes, long totalBytes) {
-                Log.d("EventRepo", "Uploading progress: " + bytes + "/" + totalBytes);
-            }
+                            @Override
+                            public void onProgress(String requestId, long bytes, long totalBytes) {
+                                Log.d("EventRepo", "Uploading progress: " + bytes + "/" + totalBytes);
+                            }
 
-            @Override
-            public void onSuccess(String requestId, Map resultData) {
-                Log.d("EventRepo", "Upload success!");
-                String imageUrl = (String) resultData.get("secure_url");
-                Log.d("EventRepo", "Image URL: " + imageUrl);
-                createEventinFirestore(title, description,time, organiser, date, price, totalTickets, imageUrl);
-            }
+                            @Override
+                            public void onSuccess(String requestId, Map resultData) {
+                                Log.d("EventRepo", "Upload success!");
+                                String imageUrl = (String) resultData.get("secure_url");
+                                Log.d("EventRepo", "Image URL: " + imageUrl);
+                                createEventinFirestore(title, description, time, organiser, date, price, totalTickets, imageUrl);
+                            }
 
-            @Override
-            public void onError(String requestId, ErrorInfo error) {
-                Log.e("EventRepo", " Upload failed: " + error.getDescription());
-                errorLiveData.setValue(error.getDescription());
-            }
+                            @Override
+                            public void onError(String requestId, ErrorInfo error) {
+                                Log.e("EventRepo", " Upload failed: " + error.getDescription());
+                                errorLiveData.setValue(error.getDescription());
+                            }
 
-            @Override
-            public void onReschedule(String requestId, ErrorInfo error) {
-                Log.e("EventRepo", "Upload rescheduled: " + error.getDescription());
-            }
-        });
+                            @Override
+                            public void onReschedule(String requestId, ErrorInfo error) {
+                                Log.e("EventRepo", "Upload rescheduled: " + error.getDescription());
+                            }
+                        });
+                    }
+                });
     }
 
     private void createEventinFirestore(String title, String description,String time,String organiser, String date, double price, int totalTickets, String imageurl) {

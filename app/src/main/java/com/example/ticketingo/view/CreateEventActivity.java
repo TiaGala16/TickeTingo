@@ -161,7 +161,7 @@ public class CreateEventActivity extends AppCompatActivity {
                 double price = Double.parseDouble(eventPrice.getText().toString().trim());
                 int totalTickets = Integer.parseInt(totalticket.getText().toString().trim());
 
-                if (title.isEmpty() || desc.isEmpty() || date.isEmpty() || imageUri == null) {
+                if (title.isEmpty() || desc.isEmpty()||inputOrg.isEmpty() ||time.isEmpty() || date.isEmpty() || imageUri == null) {
                     Toast.makeText(CreateEventActivity.this, "Fill all fields and select image", Toast.LENGTH_SHORT).show();
                     return;
                 }
