@@ -1,25 +1,28 @@
 package com.example.ticketingo.model;
 
+import com.google.firebase.firestore.PropertyName;
+
 public class Event {
     private String title;
     private String date;
+    private String time;
     private String organiser;
-    private String price;
-    private String EventInfo;
+    private double price;
+    private String description;
     private String createdBy;
     private int totalTickets;
     private int soldTickets;
-    private int imageResId;
+    @PropertyName("imageUrl")
+    private String imageURL;
 
-
-
-    public Event(String title, String date, String organiser, String price, int imageResId) {
+    public Event(String title, String date, String organiser, double price, String imageURL) {
         this.title = title;
         this.date = date;
         this.organiser = organiser;
         this.price = price;
-        this.imageResId = imageResId;
+        this.imageURL = imageURL;
     }
+    public Event() {}
 
     public String getTitle() {
         return title;
@@ -28,7 +31,13 @@ public class Event {
     public void setTitle(String title) {
         this.title = title;
     }
+    public String getTime() {
+        return time;
+    }
 
+    public void setTime(String time) {
+        this.time = time;
+    }
     public String getDate() {
         return date;
     }
@@ -45,29 +54,29 @@ public class Event {
         this.organiser = organiser;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public int getImageResId() {
-        return imageResId;
+    public String getImageURL() {
+        return imageURL;
     }
 
-    public void setImageResId(int imageResId) {
-        this.imageResId = imageResId;
-    }
-    public String getEventInfo() {
-        return EventInfo;
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 
-    public void setEventInfo(String eventInfo) {
-        EventInfo = eventInfo;
+    public String getDescription() {
+        return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
     public String getCreatedBy() {
         return createdBy;
     }

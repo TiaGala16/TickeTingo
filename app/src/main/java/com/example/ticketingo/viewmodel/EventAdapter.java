@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ticketingo.view.MainActivity;
+import com.bumptech.glide.Glide;
 import com.example.ticketingo.R;
 import com.example.ticketingo.model.Event;
 
@@ -20,12 +20,8 @@ import java.util.List;
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
     private Context context;
     private List<Event> eventList;
-//    public EventAdapter(Context context , List<Event> eventList){
-//    this.context =context;
-//    this.eventList = eventList;
-//    }
 
-    public EventAdapter(MainActivity context, List<Event> eventList) {
+    public EventAdapter(Context context, List<Event> eventList) {
         this.context =context;
         this.eventList = eventList;
     }
@@ -33,8 +29,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     @NonNull
     @Override
     public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-// In EventAdapter.onCreateViewHolder(), make sure you're using:
-        View view = LayoutInflater.from(context).inflate(R.layout.event_card_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.admin_homepage, parent, false);
         return new EventViewHolder(view);
     }
 
@@ -44,8 +39,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.title.setText(event.getTitle());
         holder.date.setText(event.getDate());
         holder.organiser.setText("Organised by: " + event.getOrganiser());
-        holder.price.setText(event.getPrice());
-        holder.image.setImageResource(event.getImageResId());
+        holder.price.setText("₹" +event.getPrice());
+
+        Glide.with(context).load(event.getImageURL()).error(R.drawable.fantastic_four).into(holder.image);
     }
 
     @Override
