@@ -8,12 +8,6 @@
     android:background="@color/bg_colour"
     tools:context=".view.SignUp">
 
-    <!-- Title -->
-
-    <!-- Subtitle -->
-
-    <!-- Name -->
-
     <TextView
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
@@ -85,14 +79,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Email -->
-
-    <!-- Password -->
-
     <EditText
         android:id="@+id/nameInput"
-        android:layout_width="332dp"
-        android:layout_height="34dp"
+        android:layout_width="338dp"
+        android:layout_height="48dp"
         android:layout_marginHorizontal="40dp"
         android:layout_marginStart="48dp"
         android:layout_marginTop="12dp"
@@ -109,8 +99,8 @@
 
     <EditText
         android:id="@+id/emailInput"
-        android:layout_width="332dp"
-        android:layout_height="34dp"
+        android:layout_width="331dp"
+        android:layout_height="48dp"
         android:layout_marginHorizontal="40dp"
         android:layout_marginStart="48dp"
         android:layout_marginTop="9dp"
@@ -127,14 +117,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
-    <!-- Confirm Password -->
-
-    <!-- Sign Up Button -->
-
     <EditText
         android:id="@+id/passwordInput"
         android:layout_width="332dp"
-        android:layout_height="34dp"
+        android:layout_height="48dp"
         android:layout_marginHorizontal="40dp"
         android:layout_marginStart="48dp"
         android:layout_marginTop="8dp"
@@ -153,7 +139,7 @@
     <EditText
         android:id="@+id/confirmPasswordInput"
         android:layout_width="332dp"
-        android:layout_height="34dp"
+        android:layout_height="48dp"
         android:layout_marginHorizontal="40dp"
         android:layout_marginStart="48dp"
         android:layout_marginTop="5dp"
@@ -173,12 +159,11 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/registerButton"
         android:layout_width="145dp"
-        android:layout_height="39dp"
+        android:layout_height="48dp"
         android:layout_marginStart="133dp"
         android:layout_marginTop="18dp"
         android:layout_marginEnd="133dp"
-        android:allCaps="false"
-        android:fontFamily="sans-serif-medium"
+        app:textAllCaps="false" android:fontFamily="sans-serif-medium"
         android:text="Sign Up"
         android:textColor="@android:color/white"
         android:textSize="16sp"
@@ -226,20 +211,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/CircleImageStyle" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/circle_bottom_left"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="21dp"
-        android:alpha="0.3"
-        android:scaleType="centerCrop"
-        android:src="@drawable/timage6"
-        app:layout_constraintEnd_toStartOf="@+id/registerButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:shapeAppearanceOverlay="@style/CircleImageStyle"
-        tools:layout_editor_absoluteY="503dp" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/circle_bottom_center"

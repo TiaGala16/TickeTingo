@@ -68,7 +68,7 @@
     <EditText
         android:id="@+id/emailIn"
         android:layout_width="0dp"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_marginTop="24dp"
         android:background="@drawable/rounded_edittext_bg"
         android:drawableStart="@drawable/ic_user"
@@ -87,7 +87,7 @@
     <EditText
         android:id="@+id/passwordIn"
         android:layout_width="265dp"
-        android:layout_height="46dp"
+        android:layout_height="48dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/rounded_edittext_bg"
         android:drawableStart="@drawable/ic_lock"
@@ -105,9 +105,8 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogin"
         android:layout_width="145dp"
-        android:layout_height="39dp"
+        android:layout_height="48dp"
         android:layout_marginTop="16dp"
-        app:textAllCaps="false"
         android:fontFamily="sans-serif-medium"
         android:text="Sign In"
         android:textColor="@android:color/white"
@@ -115,22 +114,8 @@
         app:backgroundTint="#C551A5"
         app:cornerRadius="50dp"
         app:layout_constraintStart_toStartOf="@id/passwordIn"
-        app:layout_constraintTop_toBottomOf="@id/passwordIn" />
-
-    <Button
-        android:id="@+id/btnSignup2"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="111dp"
-        android:layout_height="76dp"
-        android:text="@string/forgot_password_text"
-        android:textColor="#AA6886"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/btnLogin"
-        app:layout_constraintEnd_toEndOf="@+id/passwordIn"
-        app:layout_constraintTop_toTopOf="@+id/btnLogin"
-        app:layout_constraintVertical_bias="0.625"
-        tools:ignore="SmallSp" />
+        app:layout_constraintTop_toBottomOf="@id/passwordIn"
+        app:textAllCaps="false" />
 
     <View
         android:id="@+id/lineLeft"
@@ -275,9 +260,11 @@
         android:layout_height="100dp"
         android:layout_marginStart="-16dp"
         android:layout_marginTop="48dp"
+        android:layout_marginBottom="18dp"
         android:alpha="0.3"
         android:scaleType="centerCrop"
         android:src="@drawable/timage6"
+        app:layout_constraintBottom_toTopOf="@+id/circle_bottom_center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/circle_mid_left_lower"
         app:shapeAppearanceOverlay="@style/CircleImageStyle" />
@@ -299,12 +286,14 @@
         android:id="@+id/circle_bottom_mid_right"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="39dp"
+        android:layout_marginBottom="16dp"
         android:alpha="0.3"
         android:scaleType="centerCrop"
         android:src="@drawable/timage7"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/circle_bottom_right_lower"
         app:layout_constraintStart_toEndOf="@+id/circle_bottom_center"
         app:shapeAppearanceOverlay="@style/CircleImageStyle" />
 

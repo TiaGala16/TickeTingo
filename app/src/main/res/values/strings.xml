@@ -9,6 +9,6 @@
     </style>
     <string name="profile_icon_description">User profile settings</string>
     <string name="committee_icon_description">Icon representing an organizing committee</string>
-
-
+    <string name="event_image_description">Image showcasing the event</string>
+    <string name="organiser_logo_description">logo or organising committee </string>
 </resources>

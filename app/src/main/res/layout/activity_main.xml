@@ -7,7 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    app:scrimColor="@android:color/transparent"
     tools:openDrawer="end">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,7 +50,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_user_outline"
             app:tint="@android:color/white"
-            tools:ignore="RedundantDescription" />
+            tools:ignore="RedundantDescription,TouchTargetSizeCheck" />
 
         <TextView
             android:id="@+id/exploreHeader"
@@ -103,6 +102,8 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
             android:text="See all"
             android:textColor="@color/accent_pink"
             android:textSize="14sp"
@@ -135,7 +136,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/committeesRecyclerView"
-            tools:listitem="@layout/event_card_item" />
+            tools:listitem="@layout/admin_homepage" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -145,6 +146,4 @@
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        />
-
-</androidx.drawerlayout.widget.DrawerLayout>
+        tools:layout="@layout/fragment_profile_sidebar" /> </androidx.drawerlayout.widget.DrawerLayout>
