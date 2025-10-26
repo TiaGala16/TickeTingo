@@ -24,16 +24,20 @@
             android:contentDescription="@string/committee_icon_description"
             android:src="@drawable/committee_placeholder_icon" />
 
-    </androidx.cardview.widget.CardView> <TextView
-    android:id="@+id/committeeName"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:maxWidth="80dp"
-    android:gravity="center"
-    android:text="Cultural"
-    android:textColor="@android:color/white"
-    android:textSize="12sp"
-    android:maxLines="2"
-    android:ellipsize="end"
-    tools:text="Cultural"/> </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/committeeName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:maxWidth="80dp"
+        android:gravity="center"
+        android:text="Cultural"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        tools:text="Cultural"/>
+
+</LinearLayout>
