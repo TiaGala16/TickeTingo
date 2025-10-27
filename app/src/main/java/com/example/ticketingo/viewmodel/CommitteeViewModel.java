@@ -13,7 +13,6 @@ public class CommitteeViewModel extends ViewModel {
         // Load committees immediately when the ViewModel is created
         repo.loadCommittees();
     }
-
     public LiveData<List<Committee>> getCommittees() {
         return repo.getCommitteesLiveData();
     }

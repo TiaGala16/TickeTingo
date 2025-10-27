@@ -85,6 +85,18 @@
                 android:paddingEnd="16dp"
                 android:layout_marginBottom="16dp" />
 
+            <EditText
+                android:id="@+id/location"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:hint="Location"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#99FFFFFF"
+                android:background="@color/input_field_bg"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:layout_marginBottom="16dp" />
+
             <!-- Committee Spinner -->
             <Spinner
                 android:id="@+id/spinner"
@@ -96,7 +108,7 @@
 
             <!-- Price -->
             <EditText
-                android:id="@+id/eventPrice"
+                android:id="@+id/bookTicket"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:hint="Ticket Price (₹)"

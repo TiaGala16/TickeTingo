@@ -15,8 +15,8 @@ public class EventViewModel extends ViewModel {
     private final EventRepo repo=new EventRepo();
 
     public void createEvent(Context context, String title, String description,String time,String organiser,
-                            String date, double price, int totalTickets, Uri imageUri) {
-        repo.createEvent(context, title, description,time, organiser,date, price, totalTickets, imageUri);
+                            String date, double price, int totalTickets, Uri imageUri, String location) {
+        repo.createEvent(context, title, description,time, organiser,date, price, totalTickets, imageUri, location);
     }
 
     public void loadEvents(){

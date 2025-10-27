@@ -81,4 +81,7 @@ dependencies {
     }
     implementation("com.squareup.okhttp3:okhttp:5.2.1")
     implementation("org.jetbrains:annotations:23.0.0")
+
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+    implementation("com.google.zxing:core:3.5.3")
 }

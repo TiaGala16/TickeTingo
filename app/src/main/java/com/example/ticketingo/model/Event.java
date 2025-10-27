@@ -12,6 +12,7 @@ public class Event {
     private String createdBy;
     private int totalTickets;
     private int soldTickets;
+    private String location;
     @PropertyName("imageUrl")
     private String imageURL;
 
@@ -100,5 +101,7 @@ public class Event {
     public void setSoldTickets(int soldTickets) {
         this.soldTickets = soldTickets;
     }
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
 
 }

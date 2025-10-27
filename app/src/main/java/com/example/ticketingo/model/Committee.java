@@ -37,8 +37,6 @@ public class Committee {
     public String getLogoUrl() {
         return logoUrl;
     }
-
-    @PropertyName("logo")
     public void setLogoUrl(String logoUrl) {
         this.logoUrl = logoUrl;
     }

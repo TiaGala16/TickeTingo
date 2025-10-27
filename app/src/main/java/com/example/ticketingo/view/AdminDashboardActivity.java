@@ -55,6 +55,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         adapter = new EventAdapter(this,eventlist);
         recyclerView.setAdapter(adapter);
 
+        //add to mine
         eventViewModel.loadEvents();
 
         eventViewModel.getEvents().observe(this,events -> {

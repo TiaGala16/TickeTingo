@@ -20,10 +20,16 @@
             android:name=".view.CommitteeActivity"
             android:exported="false" />
         <activity
+            android:name=".view.ShowAllTicketsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ShowTicketActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.ForgotPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".view.BookEventActivity"
+            android:name=".view.BookTicketActivity"
             android:exported="false" />
         <activity
             android:name=".view.CreateEventActivity"

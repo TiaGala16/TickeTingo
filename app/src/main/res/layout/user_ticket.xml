@@ -8,7 +8,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
-        android:layout_height="300dp"
+        android:layout_height="70dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
@@ -24,21 +24,13 @@
             android:orientation="vertical"
             android:background="@drawable/flexcard">
 
-            <ImageView
-                android:id="@+id/eventImage"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="2"
-                android:scaleType="centerCrop"
-                app:srcCompat="@drawable/fantastic_four" />
-
             <!-- Added android:gravity="center_vertical" to center align the button -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:orientation="horizontal"
+                android:layout_height="208dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp">
 
@@ -52,31 +44,23 @@
                         android:id="@+id/eventTitle"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:paddingBottom="4dp"
                         android:text="Cult night"
                         android:textColor="@color/white"
                         android:textSize="24sp"
-                        android:textStyle="bold"
-                        android:paddingBottom="4dp"
-                        android:layout_weight="2"/>
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/eventDate"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:text="Date"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        android:paddingBottom="2dp" />
-
-                    <TextView
-                        android:id="@+id/eventOrganiser"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:text="Organised By"
+                        android:paddingBottom="2dp"
+                        android:text="Date:"
                         android:textColor="@color/white"
                         android:textSize="12sp" />
+
                 </LinearLayout>
 
                 <Button
@@ -84,7 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/flex_card_bg"
-                    android:text="Book now"
+                    android:text="Show Ticket"
                     android:textColorLink="@color/blood_red" />
 
             </LinearLayout>
