@@ -4,13 +4,11 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.cloudinary.android.MediaManager;
-import com.cloudinary.android.callback.UploadStatus;
 import com.example.ticketingo.utils.CloudinaryManager;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.cloudinary.android.callback.UploadCallback;
 import com.cloudinary.android.callback.ErrorInfo;
@@ -34,7 +32,12 @@ public class EventRepo {
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
     private final MutableLiveData<List<Event>> eventsLiveData = new MutableLiveData<>();
 
-    public MutableLiveData<List<Event>> getEventsLiveData() {return eventsLiveData;}
+    public LiveData<List<Event>> getEventsLiveData() {
+        return eventsLiveData;
+    }
+
+
+    //public MutableLiveData<List<Event>> getEventsLiveData() {return eventsLiveData;}
     public MutableLiveData<Boolean> getUploadStatus() { return uploadStatus; }
     public MutableLiveData<String> getErrorLiveData() { return errorLiveData; }
 
@@ -139,7 +142,7 @@ public class EventRepo {
 
         // Query Firestore for tickets that belong to the given event and the current user
         db.collection("Events")
-                .whereEqualTo("eventName", eventName)
+                .whereEqualTo("title", eventName)
                 .addSnapshotListener((queryDocumentSnapshots, error) -> {
                     if (error != null) {
                         Log.e("EventRepo", "Error loading ticket for event: " + eventName, error);

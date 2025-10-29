@@ -43,7 +43,7 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketView
         Ticket ticket = ticketList.get(position);
 
         holder.ticketTitle.setText(ticket.getEventName());
-        holder.ticketDate.setText(ticket.getTicketDate());
+        holder.ticketDate.setText(ticket.getTicketdate());
 
         holder.showTicket.setOnClickListener(v -> {
             if (listener != null) {

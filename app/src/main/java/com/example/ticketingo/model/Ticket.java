@@ -1,6 +1,5 @@
 package com.example.ticketingo.model;
 
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.PropertyName;
 public class Ticket {
     private String id;
@@ -33,17 +32,20 @@ public class Ticket {
         this.eventName = eventName;
     }
 
-    public String getTicketDate() {
+    @PropertyName("date")
+    public String getTicketdate() {
         return date;
     }
 
-    public void setTicketDate(String date) {
+    @PropertyName("date")
+    public void setTicketdate(String date) {
         this.date = date;
     }
 
     public String getlocation() {
         return location;
     }
+
 
     public void setlocation(String location) {
         this.location = location;
@@ -56,22 +58,32 @@ public class Ticket {
     public void setpayment(boolean payment) {
         this.payment = payment;
     }
+
+    @PropertyName("imageURL")
     public String getImageURL() {
         return imageURL;
     }
+
+    @PropertyName("imageURL")
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
     }
+
+    @PropertyName("qrCode")
     public String getQRCode() {
         return QRCode;
     }
+    @PropertyName("qrCode")
     public void setQRCode(String QRCode) {
         this.QRCode = QRCode;
     }
 
+    @PropertyName("time")
     public String getTime() {
         return time;
     }
+
+
     public void setTime(String time) {
         this.time = time;
     }
@@ -88,11 +100,11 @@ public class Ticket {
         this.email = email;
     }
     public String getId() {
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String ticketid = db.collection("Tickets").document().getId();
-        return ticketid;
+        return id;
     }
+
     public void setId(String id) {
         this.id = id;
     }
+
 }

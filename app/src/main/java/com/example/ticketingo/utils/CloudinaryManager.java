@@ -2,7 +2,6 @@ package com.example.ticketingo.utils;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
 import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.UploadCallback;

@@ -20,9 +20,7 @@ import com.example.ticketingo.model.Event;
 import com.example.ticketingo.viewmodel.AuthViewModel;
 import com.example.ticketingo.viewmodel.EventAdapter;
 import com.example.ticketingo.viewmodel.EventViewModel;
-import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;

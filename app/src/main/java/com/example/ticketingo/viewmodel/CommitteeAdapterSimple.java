@@ -1,6 +1,8 @@
 package com.example.ticketingo.viewmodel;
 
+
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.ticketingo.R;
 import com.example.ticketingo.model.Committee;
+import com.example.ticketingo.view.CommitteeDetailActivity;
 
 import java.util.List;
 
@@ -49,6 +52,9 @@ public class CommitteeAdapterSimple extends RecyclerView.Adapter<CommitteeAdapte
         // Optional: handle click on item
         holder.itemView.setOnClickListener(v -> {
             // You can handle clicks here if needed
+            Intent intent = new Intent(context, CommitteeDetailActivity.class);
+            intent.putExtra("COMMITTEE_NAME", committee.getCommittee_name());
+            context.startActivity(intent);
         });
     }
 

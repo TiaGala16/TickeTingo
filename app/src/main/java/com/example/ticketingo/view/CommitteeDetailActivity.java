@@ -4,15 +4,21 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.ticketingo.R;
+import com.example.ticketingo.model.Committee;
+import com.example.ticketingo.model.CommitteeRepo;
 import com.example.ticketingo.model.Event;
-import com.example.ticketingo.viewmodel.EventAdapter; // Reuse existing EventAdapter
-import com.example.ticketingo.viewmodel.EventViewModel; // Reuse existing EventViewModel
+import com.example.ticketingo.viewmodel.EventAdapter;
+import com.example.ticketingo.viewmodel.EventViewModel;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,45 +31,64 @@ public class CommitteeDetailActivity extends AppCompatActivity {
     private EventViewModel eventViewModel;
     private List<Event> eventList = new ArrayList<>();
 
+    private CommitteeRepo committeeRepo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Assuming your layout is activity_committee_detail.xml
         setContentView(R.layout.activity_committee_detail);
 
-        // 1. Get data passed from the list activity
-        String name = getIntent().getStringExtra("COMMITTEE_NAME");
-        String logoUrl = getIntent().getStringExtra("COMMITTEE_LOGO");
-        String description = getIntent().getStringExtra("COMMITTEE_DESC");
-
-        // 2. Initialize Views
+        // Initialize views
         committeeLogo = findViewById(R.id.committee_logo);
         committeeName = findViewById(R.id.committee_name);
         committeeDescription = findViewById(R.id.committee_description);
         eventsRecyclerView = findViewById(R.id.committee_events_recyclerview);
 
-        // 3. Display Committee Details
-        committeeName.setText(name);
-        committeeDescription.setText(description);
-        Glide.with(this)
-                .load(logoUrl)
-                .into(committeeLogo);
+        // Initialize Repo
+        committeeRepo = new CommitteeRepo();
 
-        // 4. Setup Events RecyclerView
+        // Get the committee name from the previous activity
+        String name = getIntent().getStringExtra("COMMITTEE_NAME");
+        if (name == null || name.isEmpty()) {
+            Toast.makeText(this, "No committee name received", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        // Load committee details
+        committeeRepo.loadCommitee(name);
+
+        // Observe the committee LiveData
+        committeeRepo.getCommitteesLiveData().observe(this, new Observer<List<Committee>>() {
+            @Override
+            public void onChanged(List<Committee> committees) {
+                if (committees != null && !committees.isEmpty()) {
+                    Committee committee = committees.get(0);
+                    committeeName.setText(committee.getCommittee_name());
+                    committeeDescription.setText(committee.getDescription());
+
+                    Glide.with(CommitteeDetailActivity.this)
+                            .load(committee.getLogoUrl())
+                            //.placeholder(R.drawable.committee_placeholder_icon)
+                            .into(committeeLogo);
+                } else {
+                    Toast.makeText(CommitteeDetailActivity.this, "Committee not found", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        // Setup RecyclerView for events
         eventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        // You are reusing the existing EventAdapter [cite: 588]
         eventAdapter = new EventAdapter(this, eventList);
         eventsRecyclerView.setAdapter(eventAdapter);
 
-        // 5. Fetch and Display Committee Events
-        // You are reusing the existing EventViewModel [cite: 599]
+        // Initialize EventViewModel
         eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
 
-        // **NEW LOGIC:** Call the modified load method.
-        // You will need to add a loadEventsByOrganiser method to EventViewModel 
-        // that calls the new method in EventRepo (see step 7 below).
+        // Load events organized by this committee
         eventViewModel.loadEventsByOrganiser(name);
 
+        // Observe the events LiveData
         eventViewModel.getEvents().observe(this, events -> {
             if (events != null) {
                 eventList.clear();
@@ -72,7 +97,7 @@ public class CommitteeDetailActivity extends AppCompatActivity {
             }
         });
 
-        // Optional: Observe errors from EventViewModel
+        // Observe possible errors
         eventViewModel.getError().observe(this, error -> {
             if (error != null) {
                 Toast.makeText(this, "Event Error: " + error, Toast.LENGTH_LONG).show();

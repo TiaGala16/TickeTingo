@@ -40,4 +40,25 @@ public class CommitteeRepo {
                     }
                 });
     }
+    public void loadCommitee(String name) {
+        db.collection("Committees").whereEqualTo("committee_name", name).addSnapshotListener(
+                (queryDocumentSnapshots, error) -> {
+                    if (error != null) {
+                        Log.e("CommitteeRepo", "Error loading committees", error);
+                        errorLiveData.setValue("Failed to load committees: " + error.getMessage());
+                        return;
+                    }
+                    if (queryDocumentSnapshots != null) {
+                        List<Committee> committeeList = new ArrayList<>();
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            Committee committee = doc.toObject(Committee.class);
+                            committeeList.add(committee);
+                        }
+                        committeesLiveData.setValue(committeeList);
+
+                    }
+                }
+        );
+
+    }
 }

@@ -51,6 +51,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
         // ✅ Set click listener here where 'context' and 'event' are accessible
         holder.price.setOnClickListener(v -> {
+            //Toast.makeText(context, "Book Ticket button clicked for: " + event.getTitle(), Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(context, BookTicketActivity.class);
             intent.putExtra("EVENT_TITLE", event.getTitle());
             context.startActivity(intent);

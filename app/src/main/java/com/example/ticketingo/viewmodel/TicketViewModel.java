@@ -18,7 +18,7 @@ public class TicketViewModel extends ViewModel {
     }
 
     public void loadTicket(){
-        repo.loadTicket();
+        repo.loadTickets();
     }
     public LiveData<Boolean> getUploadStatus() { return repo.getUploadStatus(); }
     public LiveData<String> getError() { return repo.getErrorLiveData(); }

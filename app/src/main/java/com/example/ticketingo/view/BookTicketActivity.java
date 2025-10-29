@@ -1,9 +1,11 @@
 package com.example.ticketingo.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.example.ticketingo.R;
 import com.example.ticketingo.model.Event;
 import com.example.ticketingo.model.EventRepo;
+import com.example.ticketingo.model.TicketRepo;
 
 import java.util.List;
 
@@ -64,22 +67,29 @@ public class BookTicketActivity extends AppCompatActivity {
                 @Override
                 public void onChanged(List<Event> events) {
                     if (events != null && !events.isEmpty()) {
-                        // For example, show the first event or any specific one you need
                         Event event = events.get(0);
 
+                        // Debugging Toast
+                        Toast.makeText(BookTicketActivity.this,
+                                "Loaded event: " + event.getTitle(),
+                                Toast.LENGTH_SHORT).show();
+
+                        // Populate UI with event details
                         heading.setText(event.getTitle());
                         eventDesc.setText(event.getDescription());
                         location.setText(event.getLocation());
                         date.setText(event.getDate());
                         price.setText("₹" + event.getPrice());
-                        contactInfoDetails.setText("ticketingo1234@gmail.com");
 
                         // Load event image with Glide
                         Glide.with(BookTicketActivity.this)
                                 .load(event.getImageURL())
-                                .placeholder(R.drawable.placeholder_image) // optional
+                                .placeholder(R.drawable.placeholder_image)
                                 .error(R.drawable.fantastic_four)
                                 .into(eventImage);
+                    } else {
+                        heading.setText("Event Not Found");
+                        eventDesc.setText("No event details available.");
                     }
                 }
             });
@@ -89,11 +99,16 @@ public class BookTicketActivity extends AppCompatActivity {
             eventDesc.setText("No event details available.");
         }
 
-        // Handle Book Now button click (example)
+        // Handle Book Now button click
         bookNow.setOnClickListener(v -> {
-            // You can navigate to a booking confirmation screen or payment activity here
-            // Example: Toast message for now
-            android.widget.Toast.makeText(this, "Booking functionality coming soon!", android.widget.Toast.LENGTH_SHORT).show();
+            TicketRepo ticketRepo = new TicketRepo();
+            ticketRepo.createTicket(this, date.getText().toString(), eventTitle, location.getText().toString(), true);
+            Intent intent = new Intent(BookTicketActivity.this, ShowTicketActivity.class);
+            intent.putExtra("ticketTitle", eventTitle);
+            startActivity(intent);
+
+            Toast.makeText(this, "Booking functionality coming soon!", Toast.LENGTH_SHORT).show();
+
         });
     }
 }

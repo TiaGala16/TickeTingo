@@ -150,7 +150,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:lineSpacingExtra="2dp"
-                android:text="For further queries\nEmail: "
+                android:text="For further queries\nEmail: ticketingo1234@gmail.com"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="12sp" />

@@ -14,10 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TickeTingo">
         <activity
-            android:name=".view.CommitteeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.CommitteeActivity"
+            android:name=".view.CommitteeDetailActivity"
             android:exported="false" />
         <activity
             android:name=".view.ShowAllTicketsActivity"
