@@ -34,9 +34,12 @@ public class Committee {
         this.description = description;
     }
 
+    @PropertyName("logo")
     public String getLogoUrl() {
         return logoUrl;
     }
+
+    @PropertyName("logo")
     public void setLogoUrl(String logoUrl) {
         this.logoUrl = logoUrl;
     }

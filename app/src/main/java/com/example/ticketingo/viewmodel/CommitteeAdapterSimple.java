@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,6 +50,8 @@ public class CommitteeAdapterSimple extends RecyclerView.Adapter<CommitteeAdapte
                 .placeholder(R.drawable.committee_placeholder_icon)
                 .into(holder.committeeIcon);
 
+
+        // Set click listener for the item (if needed)
         // Optional: handle click on item
         holder.itemView.setOnClickListener(v -> {
             // You can handle clicks here if needed

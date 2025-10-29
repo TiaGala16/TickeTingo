@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -75,6 +76,7 @@ public class ShowTicketActivity extends AppCompatActivity {
                         eventDate.setText(ticket.getTicketdate());
                         eventTime.setText(ticket.getTime());
 
+                        Toast.makeText(ShowTicketActivity.this, "img url" + ticket.getImageURL(), Toast.LENGTH_SHORT).show();
                         // Load event image
                         Glide.with(ShowTicketActivity.this)
                                 .load(ticket.getImageURL())
