@@ -80,7 +80,7 @@
                 </LinearLayout>
 
                 <Button
-                    android:id="@+id/eventPrice"
+                    android:id="@+id/bookTicket"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/flex_card_bg"

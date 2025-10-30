@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <color android:color="@color/primary_background" />
+    </item>
+
+    <item
+        android:top="-50dp"
+        android:left="-50dp"
+        android:width="250dp"
+        android:height="250dp"
+        android:alpha="0.3">
+        <shape android:shape="oval">
+            <stroke android:width="15dp" android:color="@color/circle_outline_accent" />
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+
+    <item
+        android:top="120dp"
+        android:left="200dp"
+        android:width="159dp"
+        android:height="150dp"
+        android:alpha="0.3">
+        <shape android:shape="oval">
+            <stroke android:width="20dp" android:color="@color/circle_outline_accent" />
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+
+    <item
+        android:top="450dp"
+        android:right="-80dp"
+        android:width="200dp"
+        android:height="200dp"
+        android:alpha="0.3">
+        <shape android:shape="oval">
+            <stroke android:width="10dp" android:color="@color/circle_outline_accent" />
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+
+    <item
+        android:top="300dp"
+        android:left="-200dp"
+        android:width="400dp"
+        android:height="400dp"
+        android:alpha="0.3">
+        <shape android:shape="oval">
+            <stroke android:width="25dp" android:color="#352830" /> <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+
+</layer-list>

@@ -4,13 +4,11 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.cloudinary.android.MediaManager;
-import com.cloudinary.android.callback.UploadStatus;
 import com.example.ticketingo.utils.CloudinaryManager;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.cloudinary.android.callback.UploadCallback;
 import com.cloudinary.android.callback.ErrorInfo;
@@ -19,6 +17,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.text.SimpleDateFormat;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,12 +32,17 @@ public class EventRepo {
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
     private final MutableLiveData<List<Event>> eventsLiveData = new MutableLiveData<>();
 
-    public MutableLiveData<List<Event>> getEventsLiveData() {return eventsLiveData;}
+    public LiveData<List<Event>> getEventsLiveData() {
+        return eventsLiveData;
+    }
+
+
+    //public MutableLiveData<List<Event>> getEventsLiveData() {return eventsLiveData;}
     public MutableLiveData<Boolean> getUploadStatus() { return uploadStatus; }
     public MutableLiveData<String> getErrorLiveData() { return errorLiveData; }
 
     public void createEvent(Context context, String title, String description,String time,String organiser,
-                            String date, double price, int totalTickets, Uri imageUri) {
+                            String date, double price, int totalTickets, Uri imageUri, String location) {
         if (imageUri == null) {
             errorLiveData.setValue("Image is required");
             return;
@@ -72,7 +76,7 @@ public class EventRepo {
                                 Log.d("EventRepo", "Upload success!");
                                 String imageUrl = (String) resultData.get("secure_url");
                                 Log.d("EventRepo", "Image URL: " + imageUrl);
-                                createEventinFirestore(title, description, time, organiser, date, price, totalTickets, imageUrl);
+                                createEventinFirestore(title, description, time, organiser, date, price, totalTickets, imageUrl, location);
                             }
 
                             @Override
@@ -90,7 +94,7 @@ public class EventRepo {
                 });
     }
 
-    private void createEventinFirestore(String title, String description,String time,String organiser, String date, double price, int totalTickets, String imageurl) {
+    private void createEventinFirestore(String title, String description,String time,String organiser, String date, double price, int totalTickets, String imageurl, String location) {
 
         String eventid = db.collection("Events").document().getId();
         String emailid = FirebaseAuth.getInstance().getCurrentUser().getEmail();
@@ -101,6 +105,7 @@ public class EventRepo {
         event.put("description", description);
         event.put("time",time);
         event.put("organiser" ,organiser);
+        event.put("location", location);
         event.put("date", date);
         event.put("price", price);
         event.put("imageUrl", imageurl);
@@ -112,7 +117,6 @@ public class EventRepo {
                 .addOnSuccessListener(aVoid -> uploadStatus.setValue(true))
                 .addOnFailureListener(e -> errorLiveData.setValue(e.getMessage()));
     }
-
     public void loadEvents(){
         db.collection("Events").addSnapshotListener((queryDocumentSnapshots, error) -> {
             if (error != null) {
@@ -132,6 +136,58 @@ public class EventRepo {
         });
     }
 
+    public void loadEvent(String eventName) {
+        // Get the currently logged-in user's email
+        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+        // Query Firestore for tickets that belong to the given event and the current user
+        db.collection("Events")
+                .whereEqualTo("title", eventName)
+                .addSnapshotListener((queryDocumentSnapshots, error) -> {
+                    if (error != null) {
+                        Log.e("EventRepo", "Error loading ticket for event: " + eventName, error);
+                        return;
+                    }
+                    if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                        List<Event> eventList = new ArrayList<>();
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            Event event = doc.toObject(Event.class);
+                            eventList.add(event);
+                        }
+                        // Update LiveData with filtered tickets
+                        eventsLiveData.setValue(eventList);
+
+                        Log.d("EventRepo", "Loaded " + eventList.size() +
+                                " tickets for event: " + eventName + " (email: " + email + ")");
+                    } else {
+                        Log.d("EventRepo", "No tickets found for event: " + eventName +
+                                " and user: " + email);
+                        eventsLiveData.setValue(Collections.emptyList());
+                    }
+                });
+    }
+    public void loadEventsByOrganiser(String organiserName) {
+        db.collection("Events")
+                // Filter the events by the 'organiser' field which is the committee name
+                .whereEqualTo("organiser", organiserName)
+                .addSnapshotListener((queryDocumentSnapshots, error) -> {
+                    if (error != null) {
+                        Log.e("EventRepo", "Error loading events by organiser", error);
+                        errorLiveData.setValue("Failed to load events for " + organiserName);
+                        return;
+                    }
+                    if (queryDocumentSnapshots != null) {
+                        List<Event> eventList = new ArrayList<>();
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            Event event = doc.toObject(Event.class);
+                            eventList.add(event);
+                        }
+                        // Reuse the sorting logic
+                        List<Event> upcomingEvents = getUpcomingSortedEvents(eventList);
+                        eventsLiveData.setValue(upcomingEvents);
+                    }
+                });
+    }
     private List<Event> getUpcomingSortedEvents(List<Event> eventList) {
         Date today = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());

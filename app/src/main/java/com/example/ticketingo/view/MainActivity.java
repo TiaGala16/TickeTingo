@@ -1,68 +1,121 @@
 package com.example.ticketingo.view;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
+import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ticketingo.R;
+import com.example.ticketingo.model.Committee;
 import com.example.ticketingo.model.Event;
 import com.example.ticketingo.viewmodel.AuthViewModel;
+import com.example.ticketingo.viewmodel.CommitteeAdapterSimple;
+import com.example.ticketingo.viewmodel.CommitteeViewModel;
 import com.example.ticketingo.viewmodel.EventAdapter;
+import com.example.ticketingo.viewmodel.EventViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    RecyclerView recyclerView;
-    EventAdapter adapter;
+
+    RecyclerView eventsRecyclerView;
+    RecyclerView committeesRecyclerView;
     List<Event> eventList;
-    Button btnlogout;
+    EventAdapter eventAdapter;
+    CommitteeAdapterSimple committeeAdapter;
+    List<Committee> committeeList;
+    CommitteeViewModel committeeViewModel;
+    private EventViewModel eventViewModel;
     private AuthViewModel viewModel;
+
+    private DrawerLayout drawerLayout;
+    private ImageView profileIcon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+        // Handle system bars padding
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        btnlogout = findViewById(R.id.btnlogout);
+
+        // Initialize Drawer and Profile Icon
+        drawerLayout = findViewById(R.id.drawer_layout);
+        profileIcon = findViewById(R.id.profileIcon);
+
+        // Initialize Auth ViewModel
         viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
+        // ---------- EVENTS RECYCLER VIEW ----------
+        eventsRecyclerView = findViewById(R.id.eventsRecyclerView);
+        eventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
+
         eventList = new ArrayList<>();
-        String imageUrl = "android.resource://" + getPackageName() + "/" + R.drawable.fantastic_four;
-        eventList.add(new Event("Cultural Night", "4th September 2025", "GDSC", 0, imageUrl));
-        eventList.add(new Event("Music Fest", "10th October 2025", "College Union", 100.0,imageUrl));
-        eventList.add(new Event("Tech Expo", "15th November 2025", "Tech Club", 250.0,imageUrl));
+        eventAdapter = new EventAdapter(this, eventList);
+        eventsRecyclerView.setAdapter(eventAdapter);
 
-        adapter = new EventAdapter(this, eventList);
-        recyclerView.setAdapter(adapter);
+        eventViewModel.loadEvents();
+        eventViewModel.getEvents().observe(this, events -> {
+            if (events != null) {
+                eventList.clear();
+                eventList.addAll(events);
+                eventAdapter.notifyDataSetChanged();
+            }
+        });
 
-        btnlogout.setOnClickListener(new View.OnClickListener() {
+        // ---------- COMMITTEES RECYCLER VIEW ----------
+        committeesRecyclerView = findViewById(R.id.committeesRecyclerView);
+        committeesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        committeeViewModel = new ViewModelProvider(this).get(CommitteeViewModel.class);
+
+        committeeList = new ArrayList<>();
+        committeeAdapter = new CommitteeAdapterSimple(this, committeeList);
+        committeesRecyclerView.setAdapter(committeeAdapter);
+
+
+        committeeViewModel.loadCommittees();
+        committeeViewModel.getCommittees().observe(this, committees -> {
+            if (committees != null) {
+                committeeList.clear();
+                committeeList.addAll(committees);
+                committeeAdapter.notifyDataSetChanged();
+            }
+        });
+
+        // ---------- PROFILE ICON CLICK LISTENER ----------
+        profileIcon.setOnClickListener(v -> {
+            if (drawerLayout != null) {
+                drawerLayout.openDrawer(GravityCompat.END);
+            }
+        });
+
+        // ---------- BACK PRESS HANDLER ----------
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
-            public void onClick(View view) {
-                viewModel.logout();
-                Toast.makeText(MainActivity.this,"you have logged out ",Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(MainActivity.this, LogIn.class);
-                startActivity(intent);
-                finish();
+            public void handleOnBackPressed() {
+                if (drawerLayout != null && drawerLayout.isDrawerOpen(GravityCompat.END)) {
+                    drawerLayout.closeDrawer(GravityCompat.END);
+                } else {
+                    setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+                }
             }
         });
     }
