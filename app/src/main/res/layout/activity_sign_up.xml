@@ -75,7 +75,6 @@
         android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -99,12 +98,12 @@
 
     <EditText
         android:id="@+id/emailInput"
-        android:layout_width="331dp"
+        android:layout_width="338dp"
         android:layout_height="48dp"
         android:layout_marginHorizontal="40dp"
         android:layout_marginStart="48dp"
         android:layout_marginTop="9dp"
-        android:layout_marginEnd="162dp"
+        android:layout_marginEnd="31dp"
         android:background="@color/white"
         android:hint="contact@nmims.in"
         android:inputType="textEmailAddress"
@@ -113,7 +112,7 @@
         android:textColor="@color/black"
         android:textColorHint="#99262525"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
