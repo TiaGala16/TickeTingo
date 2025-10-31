@@ -65,6 +65,7 @@ public class SignUp extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
+                String password_regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])\\S{8,}$";
                 String useremail = emailInput.getText().toString();
                 String userpass = passwordInput.getText().toString();
                 String username = nameInput.getText().toString();
@@ -74,9 +75,9 @@ public class SignUp extends AppCompatActivity {
                     Toast.makeText(SignUp.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                if(!userpass.contains(password_regex) )
                 if(!useremail.endsWith("@nmims.in")){
-                    Toast.makeText(SignUp.this,"Please enter a valid NMIMS mail ID",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUp.this,"Password should have 1 number,1 special character and 1 captial letter",Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (!confirmpass.equals(userpass)) {

@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
+import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,12 +29,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdminDashboardActivity extends AppCompatActivity {
-    private FloatingActionButton floatingActionButton3;
-    private Button btnlogout;
+    private FloatingActionButton addEventFab;
     EventAdapter adapter;
-    RecyclerView recyclerView;
+    private DrawerLayout drawer_layout;
+    private ImageView profileIcon;
+    RecyclerView eventsRecyclerView;
     private EventViewModel eventViewModel;
-    private AuthViewModel viewModel;
+//    private AuthViewModel viewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,16 +46,17 @@ public class AdminDashboardActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        floatingActionButton3 = findViewById(R.id.floatingActionButton3);
-        btnlogout=findViewById(R.id.btnlogout);
-        recyclerView = findViewById(R.id.recyclerView);
+        addEventFab = findViewById(R.id.addEventFab);
+        eventsRecyclerView = findViewById(R.id.eventsRecyclerView);
+        profileIcon = findViewById(R.id.profileIcon);
+        drawer_layout = findViewById(R.id.drawer_layout);
         eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
-        viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+//        viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
         List<Event> eventlist = new ArrayList<>();
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        eventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new EventAdapter(this,eventlist);
-        recyclerView.setAdapter(adapter);
+        eventsRecyclerView.setAdapter(adapter);
 
         //add to mine
         eventViewModel.loadEvents();
@@ -64,8 +69,12 @@ public class AdminDashboardActivity extends AppCompatActivity {
             }
         });
 
-
-        floatingActionButton3.setOnClickListener(new View.OnClickListener() {
+        profileIcon.setOnClickListener(v -> {
+            if (drawer_layout != null) {
+                drawer_layout.openDrawer(GravityCompat.END);
+            }
+        });
+        addEventFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AdminDashboardActivity.this, CreateEventActivity.class);
@@ -73,16 +82,5 @@ public class AdminDashboardActivity extends AppCompatActivity {
             }
         });
 
-        btnlogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewModel.logout();
-                Toast.makeText(AdminDashboardActivity.this,"you have logged out ",Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(AdminDashboardActivity.this, LogIn.class);
-                startActivity(intent);
-                finish();
-            }
-        });
     }
 }
