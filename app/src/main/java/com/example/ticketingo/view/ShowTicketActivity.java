@@ -16,7 +16,7 @@ import androidx.lifecycle.Observer;
 import com.bumptech.glide.Glide;
 import com.example.ticketingo.R;
 import com.example.ticketingo.model.Ticket;
-import com.example.ticketingo.model.TicketRepo;
+import com.example.ticketingo.viewmodel.TicketViewModel;
 
 import java.util.List;
 
@@ -24,8 +24,7 @@ public class ShowTicketActivity extends AppCompatActivity {
 
     private ImageView eventImage, qrCode;
     private TextView eventTitle, eventLocation, ticketName, orderNumber, eventDate, eventTime;
-
-    private TicketRepo ticketRepo;
+    private TicketViewModel ticketRepo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +55,13 @@ public class ShowTicketActivity extends AppCompatActivity {
             Log.d("ShowTicketActivity", "Loading ticket for: " + ticketTitle);
 
             // Initialize repo
-            ticketRepo = new TicketRepo();
+            ticketRepo = new TicketViewModel();
 
             // Load the ticket from Firestore
             ticketRepo.loadTicket(ticketTitle);
 
             // Observe LiveData from TicketRepo
-            ticketRepo.getTicketLiveData().observe(this, new Observer<List<Ticket>>() {
+            ticketRepo.getTickets().observe(this, new Observer<List<Ticket>>() {
                 @Override
                 public void onChanged(List<Ticket> tickets) {
                     if (tickets != null && !tickets.isEmpty()) {
@@ -76,7 +75,7 @@ public class ShowTicketActivity extends AppCompatActivity {
                         eventDate.setText(ticket.getTicketdate());
                         eventTime.setText(ticket.getTime());
 
-                        Toast.makeText(ShowTicketActivity.this, "img url" + ticket.getImageURL(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(ShowTicketActivity.this, "img url" + ticket.getImageURL(), Toast.LENGTH_SHORT).show();
                         // Load event image
                         Glide.with(ShowTicketActivity.this)
                                 .load(ticket.getImageURL())
