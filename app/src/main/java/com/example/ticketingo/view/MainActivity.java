@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
 
         eventList = new ArrayList<>();
-        eventAdapter = new EventAdapter(this, eventList);
+        eventAdapter = new EventAdapter(this, eventList,"user");
         eventsRecyclerView.setAdapter(eventAdapter);
 
         eventViewModel.loadEvents();

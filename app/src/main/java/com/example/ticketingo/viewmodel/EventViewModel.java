@@ -31,4 +31,8 @@ public class EventViewModel extends ViewModel {
     public void loadEventsByOrganiser(String organiserName) {
         repo.loadEventsByOrganiser(organiserName);
     }
+
+    public LiveData<Boolean> verifyEventById(String eventId) {
+        return repo.verifyEventById(eventId);
+    }
 }

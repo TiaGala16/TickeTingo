@@ -16,6 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.ticketingo.R;
 import com.example.ticketingo.view.BookTicketActivity;
+import com.example.ticketingo.view.ScanTicketActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +28,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     private final List<Event> eventList;
     // Remove final: we will initialize this later or within an update method
     private List<Event> eventListFull;
+    private String userRole = "user";
 
-    public EventAdapter(Context context, List<Event> eventList) {
+    public EventAdapter(Context context, List<Event> eventList, String userRole) {
         this.context = context;
         this.eventList = eventList;
         // DO NOT initialize eventListFull here, it will be empty!
         this.eventListFull = new ArrayList<>(); // Initialize as an empty list
+        this.userRole = userRole;
     }
 
     @NonNull
@@ -47,19 +52,53 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.title.setText(event.getTitle());
         holder.date.setText(event.getDate());
         holder.organiser.setText("Organised by: " + event.getOrganiser());
-        holder.price.setText("₹" + event.getPrice());
+        if("admin".equalsIgnoreCase(userRole))
+        {
+            holder.price.setText("Scan Now");
+        }else {
+            holder.price.setText("₹" + event.getPrice());
+        }
 
         Glide.with(context)
                 .load(event.getImageURL())
                 .error(R.drawable.fantastic_four)
                 .into(holder.image);
 
-        // Click listener to open BookTicketActivity
         holder.price.setOnClickListener(v -> {
-            Intent intent = new Intent(context, BookTicketActivity.class);
-            intent.putExtra("EVENT_TITLE", event.getTitle());
-            context.startActivity(intent);
+            if ("admin".equalsIgnoreCase(userRole)) {
+                Intent intent = new Intent(context, ScanTicketActivity.class);
+                intent.putExtra("EVENT_ID", event.getEventId());
+                context.startActivity(intent);
+            } else {
+                Intent intent = new Intent(context, BookTicketActivity.class);
+                intent.putExtra("EVENT_TITLE", event.getTitle());
+                context.startActivity(intent);
+            }
+
         });
+
+        // Click listener to open BookTicketActivity
+//        holder.price.setOnClickListener(v -> {
+//            String currentUserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+//            FirebaseFirestore.getInstance()
+//                    .collection("Users")
+//                    .whereEqualTo("email", currentUserEmail)
+//                    .get()
+//                    .addOnSuccessListener(querySnapshot -> {
+//                        if (!querySnapshot.isEmpty()) {
+//                            String role = querySnapshot.getDocuments().get(0).getString("role");
+//                            if ("admin".equalsIgnoreCase(role)) {
+//                                Intent intent = new Intent(context, ScanTicketActivity.class);
+//                                intent.putExtra("EVENT_ID", event.getEventId());
+//                                context.startActivity(intent);
+//                            } else {
+//                                Intent intent = new Intent(context, BookTicketActivity.class);
+//                                intent.putExtra("EVENT_TITLE", event.getTitle());
+//                                context.startActivity(intent);
+//                            }
+//                        }
+//                    });
+//        });
     }
 
     @Override
