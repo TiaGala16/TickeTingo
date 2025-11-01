@@ -36,8 +36,6 @@ public class EventRepo {
         return eventsLiveData;
     }
 
-
-    //public MutableLiveData<List<Event>> getEventsLiveData() {return eventsLiveData;}
     public MutableLiveData<Boolean> getUploadStatus() { return uploadStatus; }
     public MutableLiveData<String> getErrorLiveData() { return errorLiveData; }
 
@@ -73,7 +71,7 @@ public class EventRepo {
 
                             @Override
                             public void onSuccess(String requestId, Map resultData) {
-                                Log.d("EventRepo", "Upload success!");
+                                Log.d("EventRepo", "Upload success");
                                 String imageUrl = (String) resultData.get("secure_url");
                                 Log.d("EventRepo", "Image URL: " + imageUrl);
                                 createEventinFirestore(title, description, time, organiser, date, price, totalTickets, imageUrl, location);

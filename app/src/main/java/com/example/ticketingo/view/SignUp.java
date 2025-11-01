@@ -76,8 +76,12 @@ public class SignUp extends AppCompatActivity {
                     return;
                 }
                 if(!userpass.contains(password_regex) )
-                if(!useremail.endsWith("@nmims.in")){
+                {
                     Toast.makeText(SignUp.this,"Password should have 1 number,1 special character and 1 captial letter",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(!useremail.endsWith("@nmims.in")){
+                    Toast.makeText(SignUp.this,"Please enter a Valid NMIMS email ID",Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (!confirmpass.equals(userpass)) {
