@@ -74,7 +74,7 @@ public class ScanTicketActivity extends AppCompatActivity {
 
             String scannedData = result.getText();
             if (scannedData == null || scannedData.length() < 21) {
-                textResult.setText("❌ Invalid QR data");
+                textResult.setText("Invalid QR data");
                 textResult.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
                 return;
             }
@@ -87,7 +87,7 @@ public class ScanTicketActivity extends AppCompatActivity {
             if (eventId.equals(currentEventId)) {
                 verifyTicket(ticketId);
             } else {
-                textResult.setText("⚠️ Ticket not for this event");
+                textResult.setText("Ticket not for this event");
                 textResult.setTextColor(getResources().getColor(android.R.color.holo_orange_dark));
             }
         }
@@ -102,19 +102,19 @@ public class ScanTicketActivity extends AppCompatActivity {
                     // Ticket valid
                     ticketRef.update("used", true)
                             .addOnSuccessListener(aVoid -> {
-                                textResult.setText("✅ Ticket Accepted");
+                                textResult.setText("Ticket Accepted");
                                 textResult.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
                             })
                             .addOnFailureListener(e -> {
-                                textResult.setText("❌ Error updating ticket");
+                                textResult.setText("Error updating ticket");
                                 textResult.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
                             });
                 } else {
-                    textResult.setText("⚠️ Ticket Already Used");
+                    textResult.setText("⚠Ticket Already Used");
                     textResult.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
                 }
             } else {
-                textResult.setText("❌ Invalid Ticket");
+                textResult.setText("Invalid Ticket");
                 textResult.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
             }
         }).addOnFailureListener(e ->

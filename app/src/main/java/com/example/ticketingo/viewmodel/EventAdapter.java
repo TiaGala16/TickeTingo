@@ -77,28 +77,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
         });
 
-        // Click listener to open BookTicketActivity
-//        holder.price.setOnClickListener(v -> {
-//            String currentUserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-//            FirebaseFirestore.getInstance()
-//                    .collection("Users")
-//                    .whereEqualTo("email", currentUserEmail)
-//                    .get()
-//                    .addOnSuccessListener(querySnapshot -> {
-//                        if (!querySnapshot.isEmpty()) {
-//                            String role = querySnapshot.getDocuments().get(0).getString("role");
-//                            if ("admin".equalsIgnoreCase(role)) {
-//                                Intent intent = new Intent(context, ScanTicketActivity.class);
-//                                intent.putExtra("EVENT_ID", event.getEventId());
-//                                context.startActivity(intent);
-//                            } else {
-//                                Intent intent = new Intent(context, BookTicketActivity.class);
-//                                intent.putExtra("EVENT_TITLE", event.getTitle());
-//                                context.startActivity(intent);
-//                            }
-//                        }
-//                    });
-//        });
     }
 
     @Override

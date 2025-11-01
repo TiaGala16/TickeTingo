@@ -220,5 +220,5 @@ public class EventRepo {
                         isValidEvent.setValue(false);
                     });
         return isValidEvent;
-    }
+        }
 }
