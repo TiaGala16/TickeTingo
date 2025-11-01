@@ -66,16 +66,27 @@ public class AdminProfileSidebarFragment extends Fragment {
             }
         });
 
-        // The ProfileSidebarFragment would also have logic for the 'showTicket' button,
-        // which is now correctly omitted in this Admin fragment.
     }
 
     private void loadAdminData() {
-        // Placeholder data
-        String name = "Admin User Name";
-        String email = "admin.user@ticketingo.com";
-
-        sidebarUserName.setText(name);
-        sidebarUserEmail.setText(email);
+        if (viewModel != null) {
+            viewModel.getUser().observe(getViewLifecycleOwner(), firebaseUser -> {
+                if (firebaseUser != null) {
+                    // Fetch user data from Firestore
+                    viewModel.getUserData(firebaseUser.getUid()).observe(getViewLifecycleOwner(), user -> {
+                        if (user != null) {
+                            sidebarUserName.setText(user.getName() != null ? user.getName() : "User");
+                            sidebarUserEmail.setText(user.getEmail() != null ? user.getEmail() : "");
+                        } else {
+                            sidebarUserName.setText("User");
+                            sidebarUserEmail.setText("");
+                        }
+                    });
+                } else {
+                    sidebarUserName.setText("Not logged in");
+                    sidebarUserEmail.setText("");
+                }
+            });
+        }
     }
 }

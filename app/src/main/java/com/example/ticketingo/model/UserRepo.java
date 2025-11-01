@@ -10,14 +10,20 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class UserRepo {
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final MutableLiveData<FirebaseUser> userLiveData =  new MutableLiveData<>();
+    private final MutableLiveData<FirebaseUser> userLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
-    public UserRepo(){
-        if(auth.getCurrentUser() != null){
+
+    // ✅ Background thread pool
+    private final ExecutorService executor = Executors.newFixedThreadPool(2);
+
+    public UserRepo() {
+        if (auth.getCurrentUser() != null) {
             userLiveData.setValue(auth.getCurrentUser());
         }
     }
@@ -26,6 +32,7 @@ public class UserRepo {
         auth.signOut();
         userLiveData.setValue(null);
     }
+
     public MutableLiveData<FirebaseUser> getUserLiveData() {
         return userLiveData;
     }
@@ -34,51 +41,62 @@ public class UserRepo {
         return errorLiveData;
     }
 
+    // ✅ LOGIN (runs off main thread)
     public void login(String email, String password) {
-        auth.signInWithEmailAndPassword(email, password).
-                addOnSuccessListener(result -> {
+        executor.execute(() -> auth.signInWithEmailAndPassword(email, password)
+                .addOnSuccessListener(result -> {
                     FirebaseUser user = auth.getCurrentUser();
-                    if(user!= null)
-                    {
-                        db.collection("Users").document(user.getUid()).get().addOnSuccessListener(
-                                document -> {
-                                    if(document.exists()){
+                    if (user != null) {
+                        db.collection("Users").document(user.getUid())
+                                .get()
+                                .addOnSuccessListener(document -> {
+                                    if (document.exists()) {
                                         String role = document.getString("role");
-                                        if("admin".equals(role)){
-                                            userLiveData.setValue(user);
-                                        }else{
-                                            userLiveData.setValue(user);
-                                        }
+                                        Log.d("UserRepo", "User role: " + role);
+                                        userLiveData.setValue(user);
+                                    } else {
+                                        errorLiveData.setValue("User record not found in Firestore");
                                     }
-                                }
-                        ).addOnFailureListener(e -> errorLiveData.setValue(e.getMessage()));
-//                        userLiveData.setValue(user);
+                                })
+                                .addOnFailureListener(e -> errorLiveData.setValue(e.getMessage()));
+                    } else {
+                        errorLiveData.setValue("Login failed: user is null");
                     }
                 })
-                .addOnFailureListener(e -> errorLiveData.setValue(e.getMessage()));
+                .addOnFailureListener(e -> errorLiveData.setValue(e.getMessage())));
     }
-    public void register(String email,String password,String username){
-        auth.createUserWithEmailAndPassword(email,password).
-                addOnSuccessListener(result ->
-                {
+
+    // ✅ REGISTER (off main thread)
+    public void register(String email, String password, String username) {
+        executor.execute(() -> auth.createUserWithEmailAndPassword(email, password)
+                .addOnSuccessListener(result -> {
                     FirebaseUser user = auth.getCurrentUser();
-                    if(user!= null) {
-                        userLiveData.setValue(auth.getCurrentUser());
-                        addUsertoFirestore( user.getUid(), username,email);
+                    if (user != null) {
+                        userLiveData.setValue(user);
+                        addUserToFirestore(user.getUid(), username, email);
                     }
                 })
-                .addOnFailureListener(e -> errorLiveData.setValue(e.getMessage()));
-
+                .addOnFailureListener(e -> errorLiveData.setValue(e.getMessage())));
     }
 
-    private void addUsertoFirestore(String uid,String name, String email) {
-        Map<String, Object> userMap = new HashMap<>();
-        userMap.put("email", email);
-        userMap.put("name", name);
-        userMap.put("role", "user");
+    // ✅ Firestore user creation (also on background thread)
+    private void addUserToFirestore(String uid, String name, String email) {
+        executor.execute(() -> {
+            Map<String, Object> userMap = new HashMap<>();
+            userMap.put("email", email);
+            userMap.put("name", name);
+            userMap.put("role", "user");
 
-        db.collection("Users").document(uid).set(userMap).addOnSuccessListener(avoid->{
-                    Log.d("Firestore", "User added successfully");})
-                .addOnFailureListener(e -> errorLiveData.setValue(e.getMessage()));
+            db.collection("Users").document(uid)
+                    .set(userMap)
+                    .addOnSuccessListener(avoid -> Log.d("Firestore", "✅ User added successfully"))
+                    .addOnFailureListener(e -> errorLiveData.setValue(e.getMessage()));
+        });
+    }
+
+    // ✅ Shutdown ExecutorService safely
+    public void shutdownExecutor() {
+        executor.shutdown();
+        Log.d("UserRepo", "ExecutorService shut down.");
     }
 }
