@@ -146,11 +146,11 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--    <androidx.fragment.app.FragmentContainerView-->
-<!--        android:id="@+id/sidebar_fragment_container"-->
-<!--        android:name="com.example.ticketingo.fragments.AdminProfileSidebarFragment" android:layout_width="300dp"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_gravity="end"-->
-<!--        tools:layout="@layout/fragment_admin_profile_sidebar" />-->
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/sidebar_fragment_container"
+        android:name="com.example.ticketingo.fragments.AdminProfileSidebarFragment" android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        tools:layout="@layout/fragment_admin_profile_sidebar" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

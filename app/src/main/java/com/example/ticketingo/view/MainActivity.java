@@ -80,8 +80,11 @@ public class MainActivity extends AppCompatActivity {
         eventViewModel.loadEvents();
         eventViewModel.getEvents().observe(this, events -> {
             if (events != null) {
+                eventList.clear();
+                eventList.addAll(events);
+                eventAdapter.notifyDataSetChanged();
                 // --- USE THE ADAPTER'S UPDATE METHOD TO POPULATE BOTH LISTS ---
-                eventAdapter.updateEvents(events);
+//                eventAdapter.updateEvents(events);
                 // Note: The two lines below are now redundant since updateEvents calls notifyDataSetChanged()
                 // eventList.clear();
                 // eventList.addAll(events);
