@@ -17,15 +17,20 @@ import com.example.ticketingo.R;
 import com.example.ticketingo.model.Event;
 import com.example.ticketingo.view.BookTicketActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
     private final Context context;
     private final List<Event> eventList;
+    // Remove final: we will initialize this later or within an update method
+    private List<Event> eventListFull;
 
     public EventAdapter(Context context, List<Event> eventList) {
         this.context = context;
         this.eventList = eventList;
+        // DO NOT initialize eventListFull here, it will be empty!
+        this.eventListFull = new ArrayList<>(); // Initialize as an empty list
     }
 
     @NonNull
@@ -49,9 +54,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 .error(R.drawable.fantastic_four)
                 .into(holder.image);
 
-        // ✅ Set click listener here where 'context' and 'event' are accessible
+        // Click listener to open BookTicketActivity
         holder.price.setOnClickListener(v -> {
-            //Toast.makeText(context, "Book Ticket button clicked for: " + event.getTitle(), Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(context, BookTicketActivity.class);
             intent.putExtra("EVENT_TITLE", event.getTitle());
             context.startActivity(intent);
@@ -62,7 +66,40 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     public int getItemCount() {
         return eventList.size();
     }
+    public void updateEvents(List<Event> newEvents) {
+        // Clear both lists
+        eventListFull.clear();
+        eventList.clear();
 
+        // Populate the full list copy (source for filtering)
+        eventListFull.addAll(newEvents);
+
+        // Populate the displayed list
+        eventList.addAll(newEvents);
+
+        notifyDataSetChanged();
+    }
+    // --------------------- SEARCH / FILTER METHOD ---------------------
+    public void filter(String query) {
+        query = query.toLowerCase().trim();
+        eventList.clear();
+
+        if (query.isEmpty()) {
+            eventList.addAll(eventListFull);
+        } else {
+            for (Event event : eventListFull) {
+                // Filter by title, organiser, or date
+                if (event.getTitle().toLowerCase().contains(query) ||
+                        event.getOrganiser().toLowerCase().contains(query) ||
+                        event.getDate().toLowerCase().contains(query)) {
+                    eventList.add(event);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    // --------------------- VIEW HOLDER ---------------------
     public static class EventViewHolder extends RecyclerView.ViewHolder {
         TextView title, date, organiser;
         Button price;

@@ -7,9 +7,10 @@
 
     <Button
         android:id="@+id/btnScan"
-        android:text="Scan QR Code"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:backgroundTint="#D02C60"
+        android:text="Scan QR Code" />
 
     <TextView
         android:id="@+id/textResult"

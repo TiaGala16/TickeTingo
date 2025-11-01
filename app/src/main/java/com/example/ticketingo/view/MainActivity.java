@@ -1,6 +1,9 @@
 package com.example.ticketingo.view;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
@@ -29,18 +32,19 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    RecyclerView eventsRecyclerView;
-    RecyclerView committeesRecyclerView;
-    List<Event> eventList;
-    EventAdapter eventAdapter;
-    CommitteeAdapterSimple committeeAdapter;
-    List<Committee> committeeList;
-    CommitteeViewModel committeeViewModel;
+    private RecyclerView eventsRecyclerView;
+    private RecyclerView committeesRecyclerView;
+    private List<Event> eventList;
+    private EventAdapter eventAdapter;
+    private List<Committee> committeeList;
+    private CommitteeAdapterSimple committeeAdapter;
+    private CommitteeViewModel committeeViewModel;
     private EventViewModel eventViewModel;
     private AuthViewModel viewModel;
 
     private DrawerLayout drawerLayout;
     private ImageView profileIcon;
+    private EditText searchEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,13 +75,35 @@ public class MainActivity extends AppCompatActivity {
         eventAdapter = new EventAdapter(this, eventList);
         eventsRecyclerView.setAdapter(eventAdapter);
 
+        // Load events from ViewModel
+        // Load events from ViewModel
         eventViewModel.loadEvents();
         eventViewModel.getEvents().observe(this, events -> {
             if (events != null) {
-                eventList.clear();
-                eventList.addAll(events);
-                eventAdapter.notifyDataSetChanged();
+                // --- USE THE ADAPTER'S UPDATE METHOD TO POPULATE BOTH LISTS ---
+                eventAdapter.updateEvents(events);
+                // Note: The two lines below are now redundant since updateEvents calls notifyDataSetChanged()
+                // eventList.clear();
+                // eventList.addAll(events);
+                // eventAdapter.notifyDataSetChanged();
             }
+        });
+
+        // ---------- SEARCH FUNCTIONALITY ----------
+        searchEditText = findViewById(R.id.searchEditText);
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (eventAdapter != null) {
+                    eventAdapter.filter(s.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
         });
 
         // ---------- COMMITTEES RECYCLER VIEW ----------
@@ -88,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
         committeeList = new ArrayList<>();
         committeeAdapter = new CommitteeAdapterSimple(this, committeeList);
         committeesRecyclerView.setAdapter(committeeAdapter);
-
 
         committeeViewModel.loadCommittees();
         committeeViewModel.getCommittees().observe(this, committees -> {
