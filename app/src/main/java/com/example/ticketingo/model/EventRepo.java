@@ -222,6 +222,27 @@ public class EventRepo {
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }
+    public void checkIfEventSoldOut(String eventTitle, MutableLiveData<Boolean> soldOutStatus, MutableLiveData<String> errorLiveData) {
+        executor.execute(() -> db.collection("Events")
+                .whereEqualTo("title", eventTitle)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                        var doc = querySnapshot.getDocuments().get(0);
+                        Long soldTickets = doc.getLong("soldTickets");
+                        Long totalTickets = doc.getLong("totalTickets");
+
+                        if (soldTickets != null && totalTickets != null && soldTickets >= totalTickets) {
+                            soldOutStatus.postValue(true);
+                        } else {
+                            soldOutStatus.postValue(false);
+                        }
+                    } else {
+                        errorLiveData.postValue("Event not found.");
+                    }
+                })
+                .addOnFailureListener(e -> errorLiveData.postValue(e.getMessage())));
+    }
     public void shutdownExecutor() {
         executor.shutdown();
         Log.d("EventRepo", "ExecutorService shut down.");

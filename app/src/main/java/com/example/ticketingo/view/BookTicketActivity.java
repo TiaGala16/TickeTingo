@@ -107,26 +107,43 @@ public class BookTicketActivity extends AppCompatActivity {
 
         // Handle Book Now button click
         bookNow.setOnClickListener(v -> {
-            TicketViewModel ticketRepo = new TicketViewModel();
-            ticketRepo.checkTicket(this, date.getText().toString(), eventTitle, location.getText().toString(), true, time.getText().toString(), new TicketCreationCallback() {
-                        @Override
-                        public void onTicketCreated() {
-                            Intent intent = new Intent(BookTicketActivity.this, ShowTicketActivity.class);
-                            intent.putExtra("ticketTitle", eventTitle);
-                            startActivity(intent);
-                        }
+            if (eventTitle == null || eventTitle.isEmpty()) {
+                Toast.makeText(this, "Event title is missing.", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                        @Override
-                        public void onTicketAlreadyExists() {
-                            // Optional: show message or highlight something
-                        }
+            eventRepo.checkIfEventSoldOut(eventTitle);
+            eventRepo.getSoldOutStatus().observe(this, isSoldOut -> {
+                if (Boolean.TRUE.equals(isSoldOut)) {
+                    Toast.makeText(this, "This event is sold out", Toast.LENGTH_SHORT).show();
+                } else {
+                    TicketViewModel ticketRepo = new TicketViewModel();
+                    ticketRepo.checkTicket(this,
+                            date.getText().toString(),
+                            eventTitle,
+                            location.getText().toString(),
+                            true,
+                            time.getText().toString(),
+                            new TicketCreationCallback() {
+                                @Override
+                                public void onTicketCreated() {
+                                    Intent intent = new Intent(BookTicketActivity.this, ShowTicketActivity.class);
+                                    intent.putExtra("ticketTitle", eventTitle);
+                                    startActivity(intent);
+                                }
 
-                        @Override
-                        public void onError(String message) {
-                            Log.e("BookTicket", "Error: " + message);
-                        }
-                    }
-            );
+                                @Override
+                                public void onTicketAlreadyExists() {
+                                    Toast.makeText(BookTicketActivity.this, "You already booked this event", Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onError(String message) {
+                                    Log.e("BookTicket", "Error: " + message);
+                                }
+                            });
+                }
+            });
         });
 
     }
