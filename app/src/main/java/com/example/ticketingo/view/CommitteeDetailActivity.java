@@ -79,7 +79,7 @@ public class CommitteeDetailActivity extends AppCompatActivity {
 
         // Setup RecyclerView for events
         eventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        eventAdapter = new EventAdapter(this, eventList);
+        eventAdapter = new EventAdapter(this, eventList ,"user");
         eventsRecyclerView.setAdapter(eventAdapter);
 
         // Initialize EventViewModel

@@ -17,6 +17,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.ticketingo.R;
 import com.example.ticketingo.viewmodel.AuthViewModel;
 
+import java.util.regex.Pattern;
+
 public class SignUp extends AppCompatActivity {
 
     private AuthViewModel viewModel;
@@ -75,7 +77,7 @@ public class SignUp extends AppCompatActivity {
                     Toast.makeText(SignUp.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(!userpass.contains(password_regex) )
+                if(!Pattern.matches(password_regex, userpass))
                 {
                     Toast.makeText(SignUp.this,"Password should have 1 number,1 special character and 1 captial letter",Toast.LENGTH_SHORT).show();
                     return;

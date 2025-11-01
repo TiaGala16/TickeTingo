@@ -3,6 +3,7 @@ package com.example.ticketingo.model;
 import com.google.firebase.firestore.PropertyName;
 
 public class Event {
+    private String eventId;
     private String title;
     private String date;
     private String time;
@@ -103,5 +104,12 @@ public class Event {
     }
     public String getLocation() { return location; }
     public void setLocation(String location) { this.location = location; }
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
 
 }

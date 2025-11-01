@@ -55,7 +55,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         List<Event> eventlist = new ArrayList<>();
 
         eventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new EventAdapter(this,eventlist);
+        adapter = new EventAdapter(this,eventlist, "admin");
         eventsRecyclerView.setAdapter(adapter);
 
         //add to mine
