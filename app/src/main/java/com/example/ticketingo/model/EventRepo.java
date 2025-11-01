@@ -165,23 +165,42 @@ public class EventRepo {
                 }));
     }
     public void loadEventsByOrganiser(String organiserName) {
+        Log.d("EventRepo", "🔍 Loading events for organiser: '" + organiserName + "'");
+
         executor.execute(() -> db.collection("Events")
                 .whereEqualTo("organiser", organiserName)
                 .addSnapshotListener((queryDocumentSnapshots, error) -> {
                     if (error != null) {
-                        Log.e("EventRepo", "Error loading events by organiser", error);
+                        Log.e("EventRepo", "❌ Error loading events by organiser", error);
                         errorLiveData.postValue("Failed to load events for " + organiserName);
                         return;
                     }
+
                     if (queryDocumentSnapshots != null) {
+                        Log.d("EventRepo", "📦 Query returned " + queryDocumentSnapshots.size() + " documents");
+
                         List<Event> eventList = new ArrayList<>();
                         for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                             Event event = doc.toObject(Event.class);
                             event.setEventId(doc.getId());
                             eventList.add(event);
+
+                            // Debug log for each event
+                            Log.d("EventRepo", "  ✅ Event: " + event.getTitle() +
+                                    " | Organiser: '" + event.getOrganiser() + "'");
                         }
-                        List<Event> upcomingEvents = getUpcomingSortedEvents(eventList);
-                        eventsLiveData.postValue(upcomingEvents);
+
+                        if (eventList.isEmpty()) {
+                            Log.w("EventRepo", "⚠️ No events found for organiser: '" + organiserName + "'");
+                        }
+
+                        // Post ALL events without filtering by date
+                        eventsLiveData.postValue(eventList);
+                        Log.d("EventRepo", "✅ Posted " + eventList.size() + " events to LiveData");
+
+                    } else {
+                        Log.w("EventRepo", "⚠️ queryDocumentSnapshots is null");
+                        eventsLiveData.postValue(new ArrayList<>());
                     }
                 }));
     }

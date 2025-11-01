@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#121212"
+    android:fillViewport="true"
     tools:context=".view.CommitteeDetailActivity">
 
     <LinearLayout
@@ -29,12 +30,14 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
+                <!-- Committee Logo - Fixed 420x420px display -->
                 <ImageView
                     android:id="@+id/committee_logo"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
                     android:layout_gravity="center_horizontal"
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitCenter"
+                    android:padding="8dp"
                     android:contentDescription="Committee Logo"
                     tools:src="@tools:sample/avatars"/>
 
@@ -75,15 +78,17 @@
             android:paddingBottom="8dp"
             android:textColor="@android:color/white"/>
 
-        <!-- Events RecyclerView -->
+        <!-- Events RecyclerView - SCROLLABLE -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/committee_events_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:nestedScrollingEnabled="false"
-            android:paddingBottom="0dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="16dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_event" />
+            tools:listitem="@layout/admin_homepage" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

@@ -8,13 +8,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.example.ticketingo.model.Event;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.ticketingo.R;
-import com.example.ticketingo.model.Event;
 import com.example.ticketingo.view.BookTicketActivity;
 import com.example.ticketingo.view.ScanTicketActivity;
 import com.google.firebase.auth.FirebaseAuth;
