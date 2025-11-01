@@ -47,9 +47,9 @@ public class TicketRepo {
     public void createTicket(Context context, String date, String eventName, String location, boolean payment, String time) {
         try {
             createTicketInFirestore(date, eventName, location, payment, time);
-            Log.d("TicketRepo", "✅ createTicket() called successfully for event: " + eventName);
+            Log.d("TicketRepo", "createTicket() called successfully for event: " + eventName);
         } catch (Exception e) {
-            Log.e("TicketRepo", "❌ Failed to create ticket: " + e.getMessage());
+            Log.e("TicketRepo", "Failed to create ticket: " + e.getMessage());
             errorLiveData.postValue(e.getMessage());
         }
     }
@@ -59,7 +59,7 @@ public class TicketRepo {
         String ticketId = db.collection("Tickets").document().getId();
         String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-        Log.d("TicketRepo", "🎫 Creating Firestore ticket for user: " + email + ", event: " + eventName);
+        Log.d("TicketRepo", "Creating Firestore ticket for user: " + email + ", event: " + eventName);
 
         // 🔍 Fetch Event by name
         db.collection("Events")
@@ -68,10 +68,9 @@ public class TicketRepo {
                 .addOnSuccessListener(querySnapshot -> {
                     if (!querySnapshot.isEmpty()) {
                         DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
-                        String eventId = documentSnapshot.getId(); // ✅ Get eventId safely
+                        String eventId = documentSnapshot.getId();
                         String imageURL = documentSnapshot.getString("imageUrl");
 
-                        // 🏷 Create ticket map now that eventId is available
                         Map<String, Object> ticket = new HashMap<>();
                         ticket.put("id", ticketId);
                         ticket.put("date", date);
@@ -81,46 +80,45 @@ public class TicketRepo {
                         ticket.put("location", location);
                         ticket.put("payment", payment);
                         ticket.put("used", false);
-                        ticket.put("eventId", eventId); // optional but good to keep
+                        ticket.put("eventId", eventId);
 
-                        // 📸 Add image URL if exists
                         if (imageURL != null && !imageURL.isEmpty()) {
                             ticket.put("imageURL", imageURL);
-                            Log.d("TicketRepo", "📸 Event image found: " + imageURL);
+                            Log.d("TicketRepo", "Event image found: " + imageURL);
                         } else {
-                            Log.w("TicketRepo", "⚠️ imageURL is empty for event: " + eventName);
+                            Log.w("TicketRepo", "imageURL is empty for event: " + eventName);
                         }
 
-                        // 🧾 Generate QR Code URL
+                        //Generate QR Code URL
                         String apiURL = "https://api.qrserver.com/v1/create-qr-code/?data=" +
                                 ticketId + eventId + "&size=200x200&ecc=M&color=000000&bgcolor=ffffff";
                         ticket.put("qrCode", apiURL);
 
-                        // ✅ Increment soldTickets
+                        //Increment soldTickets
                         db.collection("Events").document(eventId)
                                 .update("soldTickets", FieldValue.increment(1))
                                 .addOnSuccessListener(aVoid ->
-                                        Log.d("TicketRepo", "✅ soldTickets incremented for " + eventName))
+                                        Log.d("TicketRepo", "soldTickets incremented for " + eventName))
                                 .addOnFailureListener(e ->
-                                        Log.e("TicketRepo", "❌ Failed to increment soldTickets: " + e.getMessage()));
+                                        Log.e("TicketRepo", "Failed to increment soldTickets: " + e.getMessage()));
 
-                        // ✅ Finally save ticket
+                        // Finally save ticket
                         db.collection("Tickets").document(ticketId).set(ticket)
                                 .addOnSuccessListener(aVoid -> {
                                     uploadStatus.postValue(true);
-                                    Log.d("TicketRepo", "✅ Ticket saved successfully for " + eventName);
+                                    Log.d("TicketRepo", "Ticket saved successfully for " + eventName);
                                 })
                                 .addOnFailureListener(e -> {
                                     errorLiveData.postValue(e.getMessage());
-                                    Log.e("TicketRepo", "❌ Failed to save ticket: " + e.getMessage());
+                                    Log.e("TicketRepo", "Failed to save ticket: " + e.getMessage());
                                 });
 
                     } else {
-                        Log.w("TicketRepo", "⚠️ No event found with title: " + eventName);
+                        Log.w("TicketRepo", "No event found with title: " + eventName);
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Log.e("TicketRepo", "❌ Error fetching event: " + e.getMessage());
+                    Log.e("TicketRepo", "Error fetching event: " + e.getMessage());
                     errorLiveData.postValue(e.getMessage());
                 });
     }
@@ -137,7 +135,7 @@ public class TicketRepo {
                 .whereEqualTo("email", email)
                 .addSnapshotListener((queryDocumentSnapshots, error) -> {
                     if (error != null) {
-                        Log.e("TicketRepo", "❌ Error loading tickets", error);
+                        Log.e("TicketRepo", "Error loading tickets", error);
                         return;
                     }
 
@@ -145,20 +143,20 @@ public class TicketRepo {
                         List<Ticket> ticketList = new ArrayList<>();
                         for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                             Ticket ticket = doc.toObject(Ticket.class);
-                            ticket.setId(doc.getId()); // 👈 Firestore document ID
+                            ticket.setId(doc.getId());
                             ticketList.add(ticket);
 
                             // Debug log to verify Firestore data
-                            Log.d("TicketRepo", "📄 Loaded Ticket → ID: " + doc.getId()
+                            Log.d("TicketRepo", "Loaded Ticket → ID: " + doc.getId()
                                     + " | Event: " + ticket.getEventName()
                                     + " | Date: " + ticket.getTicketdate());
                         }
                         //ticketLiveData.postValue(ticketList);
                         List<Ticket> upcomingTickets = getUpcomingSortedTickets(ticketList);
                         ticketLiveData.postValue(upcomingTickets);
-                        Log.d("TicketRepo", "✅ Loaded " + ticketList.size() + " tickets for " + email);
+                        Log.d("TicketRepo", "Loaded " + ticketList.size() + " tickets for " + email);
                     } else {
-                        Log.w("TicketRepo", "⚠️ No tickets found for " + email);
+                        Log.w("TicketRepo", "No tickets found for " + email);
                         ticketLiveData.postValue(Collections.emptyList());
                     }
                 });
@@ -183,30 +181,28 @@ public class TicketRepo {
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }
-
-    // ✅ Load a specific ticket by event name for current user
     public void loadTicket(String eventName) {
         String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        Log.d("TicketRepo", "🔍 loadTicket() called for event: " + eventName + " | user: " + email);
+        Log.d("TicketRepo", "loadTicket() called for event: " + eventName + " | user: " + email);
 
         db.collection("Tickets")
                 .whereEqualTo("eventName", eventName)
                 .whereEqualTo("email", email)
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
-                    Log.d("TicketRepo", "📄 Firestore query executed. Result size: " + querySnapshot.size());
+                    Log.d("TicketRepo", "Firestore query executed. Result size: " + querySnapshot.size());
                     if (!querySnapshot.isEmpty()) {
                         List<Ticket> ticketList = new ArrayList<>();
                         for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-                            Log.d("TicketRepo", "✅ Found ticket doc: " + document.getId());
+                            Log.d("TicketRepo", "Found ticket doc: " + document.getId());
                             Ticket ticket = document.toObject(Ticket.class);
 
                             if (ticket != null) {
-                                ticket.setId(document.getId()); // 👈 Set Firestore document ID
+                                ticket.setId(document.getId());
                                 ticketList.add(ticket);
 
                                 // Debug log for data validation
-                                Log.d("TicketRepo", "🎟 Ticket Data → "
+                                Log.d("TicketRepo", "Ticket Data → "
                                         + "ID: " + document.getId()
                                         + " | Event: " + ticket.getEventName()
                                         + " | Date: " + ticket.getTicketdate()
@@ -214,14 +210,14 @@ public class TicketRepo {
                             }
                         }
                         ticketLiveData.postValue(ticketList);
-                        Log.d("TicketRepo", "✅ LiveData updated with " + ticketList.size() + " ticket(s)");
+                        Log.d("TicketRepo", "LiveData updated with " + ticketList.size() + " ticket(s)");
                     } else {
-                        Log.w("TicketRepo", "⚠️ No tickets found for event: " + eventName + " and user: " + email);
+                        Log.w("TicketRepo", "No tickets found for event: " + eventName + " and user: " + email);
                         ticketLiveData.postValue(Collections.emptyList());
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Log.e("TicketRepo", "❌ Firestore error: " + e.getMessage());
+                    Log.e("TicketRepo", "Firestore error: " + e.getMessage());
                     ticketLiveData.postValue(Collections.emptyList());
                 });
     }
@@ -239,13 +235,13 @@ public class TicketRepo {
                         createTicket(context, date, eventName, location, payment, time);
                         callback.onTicketCreated();
                     } else {
-                        Log.d("TicketRepo", "⚠️ Ticket already exists for event: " + eventName);
+                        Log.d("TicketRepo", "Ticket already exists for event: " + eventName);
                         Toast.makeText(context, "You’ve already booked this event!", Toast.LENGTH_SHORT).show();
                         callback.onTicketAlreadyExists();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Log.e("TicketRepo", "❌ Error checking ticket: " + e.getMessage());
+                    Log.e("TicketRepo", "Error checking ticket: " + e.getMessage());
                     Toast.makeText(context, "Error checking ticket. Please try again.", Toast.LENGTH_SHORT).show();
                     callback.onError(e.getMessage());
                 });

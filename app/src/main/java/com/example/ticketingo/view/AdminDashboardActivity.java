@@ -3,9 +3,7 @@ package com.example.ticketingo.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ticketingo.R;
 import com.example.ticketingo.model.Event;
-import com.example.ticketingo.viewmodel.AuthViewModel;
 import com.example.ticketingo.viewmodel.EventAdapter;
 import com.example.ticketingo.viewmodel.EventViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -51,7 +48,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         profileIcon = findViewById(R.id.profileIcon);
         drawer_layout = findViewById(R.id.drawer_layout);
         eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
-//        viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+
         List<Event> eventlist = new ArrayList<>();
 
         eventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -68,7 +65,6 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         });
-
         profileIcon.setOnClickListener(v -> {
             if (drawer_layout != null) {
                 drawer_layout.openDrawer(GravityCompat.END);
