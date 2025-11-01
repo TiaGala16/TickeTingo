@@ -89,7 +89,7 @@ public class CreateEventActivity extends AppCompatActivity {
         eventImage = findViewById(R.id.eventImage);
         selectImageBtn = findViewById(R.id.selectImageBtn);
         createBtn = findViewById(R.id.createBtn);
-        locationEdit = findViewById(R.id.location); // Renamed to avoid shadowing
+        locationEdit = findViewById(R.id.location);
 
         viewModel = new ViewModelProvider(this).get(EventViewModel.class);
 
@@ -109,7 +109,6 @@ public class CreateEventActivity extends AppCompatActivity {
 
         // Image picker
         selectImageBtn.setOnClickListener(v -> imagePicker.launch("image/*"));
-
         // Date picker
         DateEvent.setOnClickListener(v -> {
             final Calendar calendar = Calendar.getInstance();

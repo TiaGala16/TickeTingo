@@ -28,9 +28,6 @@ public class EventViewModel extends ViewModel {
     public LiveData<Boolean> getUploadStatus() { return repo.getUploadStatus(); }
     public LiveData<String> getError() { return repo.getErrorLiveData(); }
     public LiveData<List<Event>> getEvents(){ return repo.getEventsLiveData();}
-    // Inside com.example.ticketingo.viewmodel.EventViewModel
-
-    // **NEW METHOD**
     public void loadEventsByOrganiser(String organiserName) {
         repo.loadEventsByOrganiser(organiserName);
     }

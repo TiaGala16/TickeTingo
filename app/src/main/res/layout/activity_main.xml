@@ -68,7 +68,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/searchEditText"
+            android:id="@+id/searchEditText2"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginStart="24dp"
@@ -95,8 +95,8 @@
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/searchEditText"
-            app:layout_constraintTop_toBottomOf="@+id/searchEditText" />
+            app:layout_constraintStart_toStartOf="@+id/searchEditText2"
+            app:layout_constraintTop_toBottomOf="@+id/searchEditText2" />
 
 
         <androidx.recyclerview.widget.RecyclerView

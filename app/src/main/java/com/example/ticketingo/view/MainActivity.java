@@ -72,20 +72,14 @@ public class MainActivity extends AppCompatActivity {
         eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
 
         eventList = new ArrayList<>();
-        eventAdapter = new EventAdapter(this, eventList,"user");
+        eventAdapter = new EventAdapter(this, eventList);
         eventsRecyclerView.setAdapter(eventAdapter);
 
-        // Load events from ViewModel
-        // Load events from ViewModel
         eventViewModel.loadEvents();
         eventViewModel.getEvents().observe(this, events -> {
             if (events != null) {
-//                eventList.clear();
-//                eventList.addAll(events);
-//                eventAdapter.notifyDataSetChanged();
-                // --- USE THE ADAPTER'S UPDATE METHOD TO POPULATE BOTH LISTS ---
                 eventAdapter.updateEvents(events);
-//                 Note: The two lines below are now redundant since updateEvents calls notifyDataSetChanged()
+                 //Note: The two lines below are now redundant since updateEvents calls notifyDataSetChanged()
                  eventList.clear();
                  eventList.addAll(events);
                  eventAdapter.notifyDataSetChanged();
@@ -93,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // ---------- SEARCH FUNCTIONALITY ----------
-        searchEditText = findViewById(R.id.searchEditText);
+        searchEditText = findViewById(R.id.searchEditText2);
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }

@@ -7,11 +7,11 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.cloudinary.android.callback.ErrorInfo;
+import com.cloudinary.android.callback.UploadCallback;
 import com.example.ticketingo.utils.CloudinaryManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.cloudinary.android.callback.UploadCallback;
-import com.cloudinary.android.callback.ErrorInfo;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.SimpleDateFormat;
@@ -23,8 +23,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
-
 
 public class EventRepo {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -32,91 +33,98 @@ public class EventRepo {
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
     private final MutableLiveData<List<Event>> eventsLiveData = new MutableLiveData<>();
 
-    public LiveData<List<Event>> getEventsLiveData() {
-        return eventsLiveData;
-    }
+    // ✅ ExecutorService for background work
+    private final ExecutorService executor = Executors.newFixedThreadPool(3);
 
+    public LiveData<List<Event>> getEventsLiveData() { return eventsLiveData; }
     public MutableLiveData<Boolean> getUploadStatus() { return uploadStatus; }
     public MutableLiveData<String> getErrorLiveData() { return errorLiveData; }
-
-    public void createEvent(Context context, String title, String description,String time,String organiser,
+    public void createEvent(Context context, String title, String description, String time, String organiser,
                             String date, double price, int totalTickets, Uri imageUri, String location) {
         if (imageUri == null) {
-            errorLiveData.setValue("Image is required");
+            errorLiveData.postValue("Image is required");
             return;
         }
-        db.collection("Events")
-                .whereEqualTo("title", title.trim())
-                .get()
-                .addOnSuccessListener(querySnapshot -> {
-                    if (!querySnapshot.isEmpty()) {
-                        // Duplicate found
-                        errorLiveData.setValue("An event with this name already exists!");
-                    } else {
+        executor.execute(() -> {
+            db.collection("Events")
+                    .whereEqualTo("title", title.trim())
+                    .get()
+                    .addOnSuccessListener(querySnapshot -> {
+                        if (!querySnapshot.isEmpty()) {
+                            errorLiveData.postValue("An event with this name already exists!");
+                        } else {
+                            CloudinaryManager.getInstance().init(context);
 
-                        CloudinaryManager.getInstance().init(context);
-                        //This part is for uploading the image in Cloudinary
+                            CloudinaryManager.getInstance().uploadImage(imageUri, new UploadCallback() {
+                                @Override
+                                public void onStart(String requestId) {
+                                    Log.d("EventRepo", "Upload started...");
+                                }
 
-                        CloudinaryManager.getInstance().uploadImage(imageUri, new UploadCallback() {
-                            @Override
-                            public void onStart(String requestId) {
-                                Log.d("EventRepo", "Upload started...");
+                                @Override
+                                public void onProgress(String requestId, long bytes, long totalBytes) {
+                                    Log.d("EventRepo", "Uploading progress: " + bytes + "/" + totalBytes);
+                                }
 
-                            }
+                                @Override
+                                public void onSuccess(String requestId, Map resultData) {
+                                    Log.d("EventRepo", "Upload success!");
+                                    String imageUrl = (String) resultData.get("secure_url");
+                                    Log.d("EventRepo", "Image URL: " + imageUrl);
 
-                            @Override
-                            public void onProgress(String requestId, long bytes, long totalBytes) {
-                                Log.d("EventRepo", "Uploading progress: " + bytes + "/" + totalBytes);
-                            }
+                                    // Run Firestore save off the main thread
+                                    executor.execute(() ->
+                                            createEventInFirestore(title, description, time, organiser, date, price,
+                                                    totalTickets, imageUrl, location)
+                                    );
+                                }
 
-                            @Override
-                            public void onSuccess(String requestId, Map resultData) {
-                                Log.d("EventRepo", "Upload success");
-                                String imageUrl = (String) resultData.get("secure_url");
-                                Log.d("EventRepo", "Image URL: " + imageUrl);
-                                createEventinFirestore(title, description, time, organiser, date, price, totalTickets, imageUrl, location);
-                            }
+                                @Override
+                                public void onError(String requestId, ErrorInfo error) {
+                                    Log.e("EventRepo", "Upload failed: " + error.getDescription());
+                                    errorLiveData.postValue(error.getDescription());
+                                }
 
-                            @Override
-                            public void onError(String requestId, ErrorInfo error) {
-                                Log.e("EventRepo", " Upload failed: " + error.getDescription());
-                                errorLiveData.setValue(error.getDescription());
-                            }
-
-                            @Override
-                            public void onReschedule(String requestId, ErrorInfo error) {
-                                Log.e("EventRepo", "Upload rescheduled: " + error.getDescription());
-                            }
-                        });
-                    }
-                });
+                                @Override
+                                public void onReschedule(String requestId, ErrorInfo error) {
+                                    Log.e("EventRepo", "Upload rescheduled: " + error.getDescription());
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(e -> errorLiveData.postValue("Error checking event: " + e.getMessage()));
+        });
     }
 
-    private void createEventinFirestore(String title, String description,String time,String organiser, String date, double price, int totalTickets, String imageurl, String location) {
+    // ✅ Firestore Event Creation
+    private void createEventInFirestore(String title, String description, String time, String organiser,
+                                        String date, double price, int totalTickets, String imageUrl, String location) {
+        try {
+            String eventId = db.collection("Events").document().getId();
+            String emailId = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-        String eventid = db.collection("Events").document().getId();
-        String emailid = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        Log.d("EventRepo", "we did NOT receive the imageurl"+ emailid);
+            Map<String, Object> event = new HashMap<>();
+            event.put("title", title);
+            event.put("description", description);
+            event.put("time", time);
+            event.put("organiser", organiser);
+            event.put("location", location);
+            event.put("date", date);
+            event.put("price", price);
+            event.put("imageUrl", imageUrl);
+            event.put("totalTickets", totalTickets);
+            event.put("soldTickets", 0);
+            event.put("createdBy", emailId);
 
-        Map<String, Object> event = new HashMap<>();
-        event.put("title", title);
-        event.put("description", description);
-        event.put("time",time);
-        event.put("organiser" ,organiser);
-        event.put("location", location);
-        event.put("date", date);
-        event.put("price", price);
-        event.put("imageUrl", imageurl);
-        event.put("totalTickets", totalTickets);
-        event.put("soldTickets", 0);
-        event.put("createdBy", emailid);
-
-        db.collection("Events").document(eventid).set(event)
-                .addOnSuccessListener(aVoid -> uploadStatus.setValue(true))
-                .addOnFailureListener(e -> errorLiveData.setValue(e.getMessage()));
+            db.collection("Events").document(eventId).set(event)
+                    .addOnSuccessListener(aVoid -> uploadStatus.postValue(true))
+                    .addOnFailureListener(e -> errorLiveData.postValue("Failed to save event: " + e.getMessage()));
+        } catch (Exception e) {
+            errorLiveData.postValue("Error saving event: " + e.getMessage());
+        }
     }
-    public void loadEvents(){
-        db.collection("Events").addSnapshotListener((queryDocumentSnapshots, error) -> {
+    public void loadEvents() {
+        executor.execute(() -> db.collection("Events").addSnapshotListener((queryDocumentSnapshots, error) -> {
             if (error != null) {
                 Log.e("EventRepo", "Error loading events", error);
                 return;
@@ -126,21 +134,17 @@ public class EventRepo {
                 List<Event> eventList = new ArrayList<>();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     Event event = doc.toObject(Event.class);
-                    event.setEventId(doc.getId());
                     eventList.add(event);
                 }
                 List<Event> upcomingEvents = getUpcomingSortedEvents(eventList);
-                eventsLiveData.setValue(upcomingEvents );
+                eventsLiveData.postValue(upcomingEvents);
             }
-        });
+        }));
     }
-
     public void loadEvent(String eventName) {
-        // Get the currently logged-in user's email
         String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-        // Query Firestore for tickets that belong to the given event and the current user
-        db.collection("Events")
+        executor.execute(() -> db.collection("Events")
                 .whereEqualTo("title", eventName)
                 .addSnapshotListener((queryDocumentSnapshots, error) -> {
                     if (error != null) {
@@ -153,40 +157,31 @@ public class EventRepo {
                             Event event = doc.toObject(Event.class);
                             eventList.add(event);
                         }
-                        // Update LiveData with filtered tickets
-                        eventsLiveData.setValue(eventList);
-
-                        Log.d("EventRepo", "Loaded " + eventList.size() +
-                                " tickets for event: " + eventName + " (email: " + email + ")");
+                        eventsLiveData.postValue(eventList);
                     } else {
-                        Log.d("EventRepo", "No tickets found for event: " + eventName +
-                                " and user: " + email);
-                        eventsLiveData.setValue(Collections.emptyList());
+                        eventsLiveData.postValue(Collections.emptyList());
                     }
-                });
+                }));
     }
     public void loadEventsByOrganiser(String organiserName) {
-        db.collection("Events")
-                // Filter the events by the 'organiser' field which is the committee name
+        executor.execute(() -> db.collection("Events")
                 .whereEqualTo("organiser", organiserName)
                 .addSnapshotListener((queryDocumentSnapshots, error) -> {
                     if (error != null) {
                         Log.e("EventRepo", "Error loading events by organiser", error);
-                        errorLiveData.setValue("Failed to load events for " + organiserName);
+                        errorLiveData.postValue("Failed to load events for " + organiserName);
                         return;
                     }
                     if (queryDocumentSnapshots != null) {
                         List<Event> eventList = new ArrayList<>();
                         for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                             Event event = doc.toObject(Event.class);
-                            event.setEventId(doc.getId());
                             eventList.add(event);
                         }
-                        // Reuse the sorting logic
                         List<Event> upcomingEvents = getUpcomingSortedEvents(eventList);
-                        eventsLiveData.setValue(upcomingEvents);
+                        eventsLiveData.postValue(upcomingEvents);
                     }
-                });
+                }));
     }
     private List<Event> getUpcomingSortedEvents(List<Event> eventList) {
         Date today = new Date();
@@ -206,26 +201,8 @@ public class EventRepo {
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }
-
-    public MutableLiveData<Boolean> verifyEventById(String eventId) {
-        MutableLiveData<Boolean> isValidEvent = new MutableLiveData<>();
-
-        db.collection("Events")
-                .document(eventId)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        isValidEvent.setValue(true);
-                    } else {
-                        isValidEvent.setValue(false);
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Log.e("EventRepo", "Error verifying event: ", e);
-                    isValidEvent.setValue(false);
-                });
-
-        return isValidEvent;
+    public void shutdownExecutor() {
+        executor.shutdown();
+        Log.d("EventRepo", "ExecutorService shut down.");
     }
-
 }
