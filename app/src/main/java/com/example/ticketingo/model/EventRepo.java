@@ -134,6 +134,7 @@ public class EventRepo {
                 List<Event> eventList = new ArrayList<>();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     Event event = doc.toObject(Event.class);
+                    event.setEventId(doc.getId());
                     eventList.add(event);
                 }
                 List<Event> upcomingEvents = getUpcomingSortedEvents(eventList);
@@ -176,6 +177,7 @@ public class EventRepo {
                         List<Event> eventList = new ArrayList<>();
                         for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                             Event event = doc.toObject(Event.class);
+                            event.setEventId(doc.getId());
                             eventList.add(event);
                         }
                         List<Event> upcomingEvents = getUpcomingSortedEvents(eventList);
@@ -204,5 +206,19 @@ public class EventRepo {
     public void shutdownExecutor() {
         executor.shutdown();
         Log.d("EventRepo", "ExecutorService shut down.");
+    }
+    public MutableLiveData<Boolean> verifyEventById(String eventId) {
+        MutableLiveData<Boolean> isValidEvent = new MutableLiveData<>();
+        db.collection("Events") .document(eventId) .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        isValidEvent.setValue(true);
+                    } else {
+                        isValidEvent.setValue(false);
+                    } }) .addOnFailureListener(e -> {
+                        Log.e("EventRepo", "Error verifying event: ", e);
+                        isValidEvent.setValue(false);
+                    });
+        return isValidEvent;
     }
 }
