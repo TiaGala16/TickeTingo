@@ -19,6 +19,9 @@ public class EventViewModel extends ViewModel {
         repo.createEvent(context, title, description,time, organiser,date, price, totalTickets, imageUri, location);
     }
 
+    public void loadEvent(String eventName){
+        repo.loadEvent(eventName);
+    }
     public void loadEvents(){
         repo.loadEvents();
     }
