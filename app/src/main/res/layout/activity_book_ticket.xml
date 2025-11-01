@@ -112,6 +112,29 @@
                     android:textSize="14sp" />
             </LinearLayout>
 
+            <!-- 🕒 Time -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_time"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 7:00 PM onwards"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
             <!-- Price -->
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -135,12 +158,12 @@
                     android:textSize="14sp" />
             </LinearLayout>
 
-
-<!--            book now btn-->
+            <!-- book now btn -->
             <Button
                 android:id="@+id/bookNow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="#D02C60"
                 android:text="Book Now" />
 
             <!-- Contact Info -->

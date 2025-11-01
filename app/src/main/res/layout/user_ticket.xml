@@ -67,7 +67,7 @@
                     android:id="@+id/bookTicket"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/flex_card_bg"
+                    android:backgroundTint="@color/accent_pink"
                     android:text="Show Ticket"
                     android:textColorLink="@color/blood_red" />
 

@@ -2,6 +2,7 @@ package com.example.ticketingo.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,17 +18,18 @@ import androidx.lifecycle.Observer;
 import com.bumptech.glide.Glide;
 import com.example.ticketingo.R;
 import com.example.ticketingo.model.Event;
-import com.example.ticketingo.model.EventRepo;
-import com.example.ticketingo.model.TicketRepo;
+import com.example.ticketingo.model.TicketCreationCallback;
+import com.example.ticketingo.viewmodel.EventViewModel;
+import com.example.ticketingo.viewmodel.TicketViewModel;
 
 import java.util.List;
 
 public class BookTicketActivity extends AppCompatActivity {
 
     private ImageView eventImage;
-    private TextView heading, eventDesc, location, date, price, contactInfoDetails;
+    private TextView heading, eventDesc, location, date, price, contactInfoDetails, time;
     private Button bookNow;
-    private EventRepo eventRepo;
+    private EventViewModel eventRepo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,7 @@ public class BookTicketActivity extends AppCompatActivity {
         });
 
         // Initialize repository
-        eventRepo = new EventRepo();
+        eventRepo = new EventViewModel();
 
         // Initialize views
         eventImage = findViewById(R.id.eventImage);
@@ -54,6 +56,8 @@ public class BookTicketActivity extends AppCompatActivity {
         price = findViewById(R.id.price);
         contactInfoDetails = findViewById(R.id.contactInfoDetails);
         bookNow = findViewById(R.id.bookNow);
+        time = findViewById(R.id.time);
+
 
         // Get event title from intent
         String eventTitle = getIntent().getStringExtra("EVENT_TITLE");
@@ -63,7 +67,7 @@ public class BookTicketActivity extends AppCompatActivity {
             eventRepo.loadEvent(eventTitle);
 
             // Observe the event LiveData
-            eventRepo.getEventsLiveData().observe(this, new Observer<List<Event>>() {
+            eventRepo.getEvents().observe(this, new Observer<List<Event>>() {
                 @Override
                 public void onChanged(List<Event> events) {
                     if (events != null && !events.isEmpty()) {
@@ -80,6 +84,8 @@ public class BookTicketActivity extends AppCompatActivity {
                         location.setText(event.getLocation());
                         date.setText(event.getDate());
                         price.setText("₹" + event.getPrice());
+                        time.setText(event.getTime());
+
 
                         // Load event image with Glide
                         Glide.with(BookTicketActivity.this)
@@ -101,14 +107,27 @@ public class BookTicketActivity extends AppCompatActivity {
 
         // Handle Book Now button click
         bookNow.setOnClickListener(v -> {
-            TicketRepo ticketRepo = new TicketRepo();
-            ticketRepo.createTicket(this, date.getText().toString(), eventTitle, location.getText().toString(), true);
-            Intent intent = new Intent(BookTicketActivity.this, ShowTicketActivity.class);
-            intent.putExtra("ticketTitle", eventTitle);
-            startActivity(intent);
+            TicketViewModel ticketRepo = new TicketViewModel();
+            ticketRepo.checkTicket(this, date.getText().toString(), eventTitle, location.getText().toString(), true, time.getText().toString(), new TicketCreationCallback() {
+                        @Override
+                        public void onTicketCreated() {
+                            Intent intent = new Intent(BookTicketActivity.this, ShowTicketActivity.class);
+                            intent.putExtra("ticketTitle", eventTitle);
+                            startActivity(intent);
+                        }
 
-            Toast.makeText(this, "Booking functionality coming soon!", Toast.LENGTH_SHORT).show();
+                        @Override
+                        public void onTicketAlreadyExists() {
+                            // Optional: show message or highlight something
+                        }
 
+                        @Override
+                        public void onError(String message) {
+                            Log.e("BookTicket", "Error: " + message);
+                        }
+                    }
+            );
         });
+
     }
 }
