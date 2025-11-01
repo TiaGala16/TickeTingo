@@ -131,14 +131,18 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
+            android:backgroundTint="#7F7DC1"
             android:clickable="true"
+            android:contentDescription="Add new event"
             android:focusable="true"
-            android:backgroundTint="#D02C60"
-            android:contentDescription="Add new event"  app:layout_constraintBottom_toBottomOf="parent"
+            app:fabCustomSize="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/baseline_add_24"
-            app:fabCustomSize="72dp"
-            app:maxImageSize="48dp" />
+            app:maxImageSize="35dp"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.FloatingActionButton"
+            app:srcCompat="@drawable/baseline_add_24" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
