@@ -41,7 +41,7 @@ public class UserRepo {
         return errorLiveData;
     }
 
-    // ✅ LOGIN (runs off main thread)
+    //  LOGIN (runs off main thread)
     public void login(String email, String password) {
         executor.execute(() -> auth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener(result -> {
@@ -66,7 +66,7 @@ public class UserRepo {
                 .addOnFailureListener(e -> errorLiveData.setValue(e.getMessage())));
     }
 
-    // ✅ REGISTER (off main thread)
+    //  REGISTER (off main thread)
     public void register(String email, String password, String username) {
         executor.execute(() -> auth.createUserWithEmailAndPassword(email, password)
                 .addOnSuccessListener(result -> {
@@ -79,7 +79,7 @@ public class UserRepo {
                 .addOnFailureListener(e -> errorLiveData.setValue(e.getMessage())));
     }
 
-    // ✅ Firestore user creation (also on background thread)
+    //  Firestore user creation (also on background thread)
     private void addUserToFirestore(String uid, String name, String email) {
         executor.execute(() -> {
             Map<String, Object> userMap = new HashMap<>();
@@ -94,7 +94,7 @@ public class UserRepo {
         });
     }
 
-    // ✅ Shutdown ExecutorService safely
+    // Shutdown ExecutorService safely
     public void shutdownExecutor() {
         executor.shutdown();
         Log.d("UserRepo", "ExecutorService shut down.");

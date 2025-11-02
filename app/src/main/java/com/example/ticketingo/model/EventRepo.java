@@ -33,7 +33,7 @@ public class EventRepo {
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
     private final MutableLiveData<List<Event>> eventsLiveData = new MutableLiveData<>();
 
-    // ✅ ExecutorService for background work
+    // ExecutorService for background work
     private final ExecutorService executor = Executors.newFixedThreadPool(3);
 
     public LiveData<List<Event>> getEventsLiveData() { return eventsLiveData; }
@@ -96,7 +96,7 @@ public class EventRepo {
         });
     }
 
-    // ✅ Firestore Event Creation
+    // Firestore Event Creation
     private void createEventInFirestore(String title, String description, String time, String organiser,
                                         String date, double price, int totalTickets, String imageUrl, String location) {
         try {
@@ -123,6 +123,7 @@ public class EventRepo {
             errorLiveData.postValue("Error saving event: " + e.getMessage());
         }
     }
+    //Recycler view loading events on AdminPage
     public void loadEvents() {
         executor.execute(() -> db.collection("Events").addSnapshotListener((queryDocumentSnapshots, error) -> {
             if (error != null) {
@@ -204,6 +205,7 @@ public class EventRepo {
                     }
                 }));
     }
+    //Sorting the Events according their dates
     private List<Event> getUpcomingSortedEvents(List<Event> eventList) {
         Date today = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
@@ -243,6 +245,40 @@ public class EventRepo {
                 })
                 .addOnFailureListener(e -> errorLiveData.postValue(e.getMessage())));
     }
+    // (UpdateTicketsActivity) Add tickets to existing totalTickets count
+    public LiveData<String> addTicketsToEvent(String eventName, int ticketsToAdd) {
+        MutableLiveData<String> resultLiveData = new MutableLiveData<>();
+
+        executor.execute(() -> db.collection("Events")
+                .whereEqualTo("title", eventName)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (!querySnapshot.isEmpty()) {
+                        var docRef = querySnapshot.getDocuments().get(0).getReference();
+
+                        docRef.get().addOnSuccessListener(documentSnapshot -> {
+                            if (documentSnapshot.exists()) {
+                                Long currentTotal = documentSnapshot.getLong("totalTickets");
+                                if (currentTotal == null) currentTotal = 0L;
+
+                                long updatedTotal = currentTotal + ticketsToAdd;
+
+                                docRef.update("totalTickets", updatedTotal)
+                                        .addOnSuccessListener(aVoid -> resultLiveData.postValue("success"))
+                                        .addOnFailureListener(e -> resultLiveData.postValue("failure"));
+                            } else {
+                                resultLiveData.postValue("not_found");
+                            }
+                        }).addOnFailureListener(e -> resultLiveData.postValue("error"));
+                    } else {
+                        resultLiveData.postValue("not_found");
+                    }
+                })
+                .addOnFailureListener(e -> resultLiveData.postValue("error")));
+
+        return resultLiveData;
+    }
+
     public void shutdownExecutor() {
         executor.shutdown();
         Log.d("EventRepo", "ExecutorService shut down.");

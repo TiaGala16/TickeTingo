@@ -88,21 +88,11 @@ public class LogIn extends AppCompatActivity {
         btnForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = emailIn.getText().toString().trim();
 
-                if(email.isEmpty()) {
-                    Toast.makeText(LogIn.this, "Please enter your email", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                Intent intent = new Intent(LogIn.this, ForgotPasswordActivity.class);
+//                intent.putExtra("email_id" , email);
+                startActivity(intent);
 
-                FirebaseAuth.getInstance().sendPasswordResetEmail(email)
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(LogIn.this,"Password reset email sent!", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(LogIn.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
             }
         });
 

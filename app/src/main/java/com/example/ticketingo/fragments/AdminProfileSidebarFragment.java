@@ -17,13 +17,14 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.ticketingo.R; // Ensure this is correct for your R file
 import com.example.ticketingo.view.AdminDashboardActivity;
 import com.example.ticketingo.view.LogIn;
+import com.example.ticketingo.view.UpdateTicketsActivity;
 import com.example.ticketingo.viewmodel.AuthViewModel;
 
 public class AdminProfileSidebarFragment extends Fragment {
 
     private TextView sidebarUserName;
     private TextView sidebarUserEmail;
-    private Button btnLogout;
+    private Button btnLogout,addTickets;
     AuthViewModel viewModel ;
 
     public AdminProfileSidebarFragment() {
@@ -45,7 +46,7 @@ public class AdminProfileSidebarFragment extends Fragment {
         sidebarUserName = view.findViewById(R.id.sidebarUserName);
         sidebarUserEmail = view.findViewById(R.id.sidebarUserEmail);
         btnLogout = view.findViewById(R.id.btnlogout);
-
+        addTickets= view.findViewById(R.id.addTickets);
         if (getActivity() != null) {
             viewModel = new ViewModelProvider(getActivity()).get(AuthViewModel.class);
         }
@@ -62,6 +63,14 @@ public class AdminProfileSidebarFragment extends Fragment {
                 Toast.makeText(requireContext(),"you have logged out ",Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(requireContext(), LogIn.class);
+                startActivity(intent);
+            }
+        });
+
+        addTickets.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(requireContext(), UpdateTicketsActivity.class);
                 startActivity(intent);
             }
         });
