@@ -43,4 +43,7 @@ public class EventViewModel extends ViewModel {
     public LiveData<Boolean> verifyEventById(String eventId) {
         return repo.verifyEventById(eventId);
     }
+    public LiveData<String> addTicketsToEvent(String eventName, int ticketsToAdd) {
+        return repo.addTicketsToEvent(eventName, ticketsToAdd);
+    }
 }

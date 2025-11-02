@@ -26,15 +26,13 @@ import java.util.List;
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
     private final Context context;
     private final List<Event> eventList;
-    // Remove final: we will initialize this later or within an update method
     private List<Event> eventListFull;
     private String userRole = "user";
 
     public EventAdapter(Context context, List<Event> eventList, String userRole) {
         this.context = context;
         this.eventList = eventList;
-        // DO NOT initialize eventListFull here, it will be empty!
-        this.eventListFull = new ArrayList<>(); // Initialize as an empty list
+        this.eventListFull = new ArrayList<>();
         this.userRole = userRole;
     }
 
