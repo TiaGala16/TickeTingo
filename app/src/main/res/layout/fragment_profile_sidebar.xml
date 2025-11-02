@@ -60,6 +60,13 @@
         android:backgroundTint="@color/accent_pink"
         android:text="Show My Tickets"
         android:layout_marginBottom="10dp"/>
+    <Button
+        android:id="@+id/btnTransactionHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/accent_pink"
+        android:text="Transaction History"
+        android:layout_marginBottom="10dp"/>
 
     <Button
         android:id="@+id/btnlogout"
