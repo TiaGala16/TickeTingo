@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:background="#1C1C1E"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_colour"
     tools:context=".view.CreateEventActivity">
 
     <ScrollView
@@ -18,20 +17,20 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingStart="24dp"
-            android:paddingEnd="24dp"
             android:paddingTop="48dp"
+            android:paddingEnd="24dp"
             android:paddingBottom="32dp">
 
             <TextView
                 android:id="@+id/createEventTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="CREATE NEW EVENT"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
+                android:layout_marginTop="16dp"
                 android:gravity="center"
-                android:layout_marginTop="16dp" />
+                android:text="CREATE NEW EVENT"
+                android:textColor="@android:color/white"
+                android:textSize="28sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/createEventSubtitle"
@@ -47,9 +46,9 @@
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
                 android:columnCount="2"
-                android:rowCount="3"
-                android:layout_marginBottom="24dp">
+                android:rowCount="3">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -65,17 +64,18 @@
                         android:text="Event Name"
                         android:textColor="#AA6886"
                         android:textSize="14sp" />
+
                     <EditText
                         android:id="@+id/eventName"
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/rounded_edittext_bg"
                         android:hint="Name"
-                        android:textColor="#000000"
-                        android:textColorHint="#99000000"
-                        android:background="@drawable/rounded_white_bg"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
-                        android:layout_marginBottom="16dp" />
+                        android:textColor="#000000"
+                        android:textColorHint="#99FFFFFF" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -92,20 +92,21 @@
                         android:text="Date"
                         android:textColor="#AA6886"
                         android:textSize="14sp" />
+
                     <EditText
                         android:id="@+id/DateEvent"
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/rounded_edittext_bg"
+                        android:clickable="true"
+                        android:focusable="false"
                         android:hint="DD/MM/YYYY"
-                        android:textColor="#000000"
-                        android:textColorHint="#99000000"
-                        android:background="@drawable/rounded_white_bg"
+                        android:inputType="date"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
-                        android:focusable="false"
-                        android:clickable="true"
-                        android:inputType="date"
-                        android:layout_marginBottom="16dp" />
+                        android:textColor="#000000"
+                        android:textColorHint="#99FFFFFF" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -127,13 +128,13 @@
                         android:id="@+id/location"
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/rounded_edittext_bg"
                         android:hint="Venue"
-                        android:textColor="#000000"
-                        android:textColorHint="#99000000"
-                        android:background="@drawable/rounded_white_bg"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
-                        android:layout_marginBottom="16dp" />
+                        android:textColor="#000000"
+                        android:textColorHint="#99FFFFFF" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -150,20 +151,21 @@
                         android:text="Time"
                         android:textColor="#AA6886"
                         android:textSize="14sp" />
+
                     <EditText
                         android:id="@+id/TimeEvent"
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/rounded_edittext_bg"
+                        android:clickable="true"
+                        android:focusable="false"
                         android:hint="HH:MM AM/PM"
-                        android:textColor="#000000"
-                        android:textColorHint="#99000000"
-                        android:background="@drawable/rounded_white_bg"
+                        android:inputType="time"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
-                        android:focusable="false"
-                        android:clickable="true"
-                        android:inputType="time"
-                        android:layout_marginBottom="16dp" />
+                        android:textColor="#000000"
+                        android:textColorHint="#99FFFFFF" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -180,18 +182,19 @@
                         android:text="Ticket Price"
                         android:textColor="#AA6886"
                         android:textSize="14sp" />
+
                     <EditText
                         android:id="@+id/bookTicket"
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/rounded_edittext_bg"
                         android:hint="Price (₹)"
                         android:inputType="numberDecimal"
-                        android:textColor="#000000"
-                        android:textColorHint="#99000000"
-                        android:background="@drawable/rounded_white_bg"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
-                        android:layout_marginBottom="16dp" />
+                        android:textColor="#000000"
+                        android:textColorHint="#99FFFFFF" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -208,18 +211,19 @@
                         android:text="Total Tickets"
                         android:textColor="#AA6886"
                         android:textSize="14sp" />
+
                     <EditText
                         android:id="@+id/totalticket"
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
-                        android:background="@drawable/rounded_white_bg"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/rounded_edittext_bg"
                         android:hint="Count"
                         android:inputType="number"
-                        android:textColor="#000000"
-                        android:textColorHint="#99000000"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
-                        android:layout_marginBottom="16dp" />
+                        android:textColor="#000000"
+                        android:textColorHint="#99FFFFFF" />
                 </LinearLayout>
             </GridLayout>
 
@@ -230,14 +234,15 @@
                 android:text="Organizing Committee"
                 android:textColor="#AA6886"
                 android:textSize="14sp" />
+
             <Spinner
                 android:id="@+id/spinner"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:background="@drawable/rounded_white_bg"
-                android:spinnerMode="dropdown"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/rounded_edittext_bg"
                 android:paddingStart="16dp"
-                android:layout_marginBottom="24dp" />
+                android:spinnerMode="dropdown" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -246,18 +251,19 @@
                 android:text="Event Description"
                 android:textColor="#AA6886"
                 android:textSize="14sp" />
+
             <EditText
                 android:id="@+id/InfoEvent"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:hint="Details, agenda, special notes..."
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/rounded_edittext_bg"
                 android:gravity="top|start"
+                android:hint="Details, agenda, special notes..."
                 android:inputType="textMultiLine"
-                android:textColor="#000000"
-                android:textColorHint="#99000000"
-                android:background="@drawable/rounded_white_bg"
                 android:padding="16dp"
-                android:layout_marginBottom="24dp" />
+                android:textColor="#000000"
+                android:textColorHint="#99FFFFFF" />
 
             <Button
                 android:id="@+id/selectImageBtn"
@@ -275,9 +281,9 @@
                 android:layout_height="200dp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="32dp"
-                android:scaleType="centerCrop"
+                android:background="@drawable/rounded_edittext_bg"
                 android:contentDescription="Event image preview"
-                android:background="@drawable/rounded_border_bg_dark" />
+                android:scaleType="centerCrop" />
 
             <Button
                 android:id="@+id/createBtn"
