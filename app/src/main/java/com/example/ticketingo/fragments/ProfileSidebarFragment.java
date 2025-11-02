@@ -19,13 +19,14 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.ticketingo.R;
 import com.example.ticketingo.view.LogIn;
 import com.example.ticketingo.view.ShowAllTicketsActivity;
+import com.example.ticketingo.view.TransactionHistoryActivity;
 import com.example.ticketingo.viewmodel.AuthViewModel;
 
 public class ProfileSidebarFragment extends Fragment {
 
     private TextView sidebarUserName;
     private TextView sidebarUserEmail;
-    private Button btnLogout, showTicket;
+    private Button btnLogout, showTicket, btnTransactionHistory;
     private AuthViewModel viewModel;
 
     @Nullable
@@ -42,6 +43,12 @@ public class ProfileSidebarFragment extends Fragment {
         sidebarUserEmail = view.findViewById(R.id.sidebarUserEmail);
         btnLogout = view.findViewById(R.id.btnlogout);
         showTicket = view.findViewById(R.id.bookTicket);
+        btnTransactionHistory = view.findViewById(R.id.btnTransactionHistory);
+
+        btnTransactionHistory.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), TransactionHistoryActivity.class);
+            startActivity(intent);
+        });
 
         if (getActivity() != null) {
             viewModel = new ViewModelProvider(getActivity()).get(AuthViewModel.class);
