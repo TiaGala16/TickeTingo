@@ -50,7 +50,7 @@ public class LogIn extends AppCompatActivity {
                         .addOnSuccessListener(doc -> {
                             if (doc.exists()) {
                                 String role = doc.getString("role");
-                                if ("admin".equals(role)) {
+                                if ("admin".equals(role) || "superadmin".equals(role)) {
                                     startActivity(new Intent(this, AdminDashboardActivity.class));
                                 } else {
                                     startActivity(new Intent(this, MainActivity.class));

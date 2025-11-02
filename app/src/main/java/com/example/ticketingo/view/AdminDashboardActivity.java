@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
@@ -21,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ticketingo.R;
 import com.example.ticketingo.model.Event;
+import com.example.ticketingo.viewmodel.AuthViewModel;
 import com.example.ticketingo.viewmodel.EventAdapter;
 import com.example.ticketingo.viewmodel.EventViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -29,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdminDashboardActivity extends AppCompatActivity {
+
 
     private FloatingActionButton addEventFab;
     private DrawerLayout drawer_layout;
@@ -79,7 +84,8 @@ public class AdminDashboardActivity extends AppCompatActivity {
         // ---------- Search Functionality ----------
         searchEditText2.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -87,7 +93,8 @@ public class AdminDashboardActivity extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         // ---------- Profile Sidebar ----------
@@ -103,4 +110,6 @@ public class AdminDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
-}
+    }
+
+

@@ -19,7 +19,7 @@ public class UserRepo {
     private final MutableLiveData<FirebaseUser> userLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
-    // ✅ Background thread pool
+    // Background thread pool
     private final ExecutorService executor = Executors.newFixedThreadPool(2);
 
     public UserRepo() {
@@ -92,6 +92,87 @@ public class UserRepo {
                     .addOnSuccessListener(avoid -> Log.d("Firestore", "✅ User added successfully"))
                     .addOnFailureListener(e -> errorLiveData.setValue(e.getMessage()));
         });
+    }
+
+    public MutableLiveData<String> getUserRole() {
+        MutableLiveData<String> roleLiveData = new MutableLiveData<>();
+        FirebaseUser currentUser = auth.getCurrentUser();
+
+        if (currentUser == null) {
+            roleLiveData.postValue("guest");
+            return roleLiveData;
+        }
+
+        db.collection("Users").document(currentUser.getUid())
+                .get()
+                .addOnSuccessListener(document -> {
+                    if (document.exists()) {
+                        String role = document.getString("role");
+                        roleLiveData.postValue(role != null ? role : "user");
+                    } else {
+                        roleLiveData.postValue("user");
+                    }
+                })
+                .addOnFailureListener(e -> roleLiveData.postValue("user"));
+
+        return roleLiveData;
+    }
+
+    public MutableLiveData<String> makeUserAdmin(String emailToPromote) {
+        MutableLiveData<String> result = new MutableLiveData<>();
+        FirebaseUser currentUser = auth.getCurrentUser();
+
+        if (currentUser == null || !currentUser.getEmail().equals("tiagala25@gmail.com")) {
+            result.postValue("unauthorized");
+            return result;
+        }
+
+        db.collection("Users")
+                .whereEqualTo("email", emailToPromote)
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    if (!snapshot.isEmpty()) {
+                        String docId = snapshot.getDocuments().get(0).getId();
+                        db.collection("Users").document(docId)
+                                .update("role", "admin")
+                                .addOnSuccessListener(aVoid -> result.postValue("success"))
+                                .addOnFailureListener(e -> result.postValue("error"));
+                    } else {
+                        result.postValue("not_found");
+                    }
+                })
+                .addOnFailureListener(e -> result.postValue("error"));
+
+        return result;
+    }
+
+    public MutableLiveData<String> removeAdmin(String emailToDemote) {
+        MutableLiveData<String> result = new MutableLiveData<>();
+        FirebaseUser currentUser = auth.getCurrentUser();
+
+        // Only Superadmin (Tia) can perform this
+        if (currentUser == null || !currentUser.getEmail().equals("tiagala25@gmail.com")) {
+            result.postValue("unauthorized");
+            return result;
+        }
+
+        db.collection("Users")
+                .whereEqualTo("email", emailToDemote)
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    if (!snapshot.isEmpty()) {
+                        String docId = snapshot.getDocuments().get(0).getId();
+                        db.collection("Users").document(docId)
+                                .update("role", "user")
+                                .addOnSuccessListener(aVoid -> result.postValue("success"))
+                                .addOnFailureListener(e -> result.postValue("error"));
+                    } else {
+                        result.postValue("not_found");
+                    }
+                })
+                .addOnFailureListener(e -> result.postValue("error"));
+
+        return result;
     }
 
     // Shutdown ExecutorService safely

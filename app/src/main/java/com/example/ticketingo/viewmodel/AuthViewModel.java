@@ -78,4 +78,16 @@ public class AuthViewModel extends ViewModel {
         public String getName() { return name; }
         public String getEmail() { return email; }
     }
+    // inside AuthViewModel
+    public LiveData<String> getUserRole() {
+        return repository.getUserRole();
+    }
+
+    public LiveData<String> makeUserAdmin(String emailToPromote) {
+        return repository.makeUserAdmin(emailToPromote);
+    }
+    public LiveData<String> removeAdmin(String emailToDemote) {
+        return repository.removeAdmin(emailToDemote);
+    }
+
 }

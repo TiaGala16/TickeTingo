@@ -93,7 +93,6 @@ public class CreateEventActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(EventViewModel.class);
 
-        // Spinner setup
         ArrayList<String> committees = new ArrayList<>();
         committees.add("Cultural");
         committees.add("Editorial");
@@ -107,9 +106,7 @@ public class CreateEventActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-        // Image picker
         selectImageBtn.setOnClickListener(v -> imagePicker.launch("image/*"));
-        // Date picker
         DateEvent.setOnClickListener(v -> {
             final Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR);
@@ -127,7 +124,6 @@ public class CreateEventActivity extends AppCompatActivity {
             datePickerDialog.show();
         });
 
-        // Time picker
         TimeEvent.setOnClickListener(v -> {
             final Calendar calendar = Calendar.getInstance();
             int hr = calendar.get(Calendar.HOUR_OF_DAY);
@@ -143,8 +139,7 @@ public class CreateEventActivity extends AppCompatActivity {
             );
             timePickerDialog.show();
         });
-
-        // Create button
+//Creating the event here
         createBtn.setOnClickListener(v -> {
             String title = eventName.getText().toString().trim();
             String desc = InfoEvent.getText().toString().trim();
@@ -165,6 +160,10 @@ public class CreateEventActivity extends AppCompatActivity {
 
             if (title.isEmpty() || desc.isEmpty() || inputOrg.isEmpty() || time.isEmpty() || date.isEmpty() || imageUri == null) {
                 Toast.makeText(this, "Fill all fields and select image", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(title.length()>=16){
+                Toast.makeText(this, "Title should be less than 16 characters", Toast.LENGTH_SHORT).show();
                 return;
             }
 
