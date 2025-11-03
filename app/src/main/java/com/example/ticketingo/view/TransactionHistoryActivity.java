@@ -64,11 +64,6 @@ public class TransactionHistoryActivity extends AppCompatActivity {
             }
         });
 
-        // Observe errors
-        transactionViewModel.getError().observe(this, error -> {
-            if (error != null) {
-                Toast.makeText(this, "Error: " + error, Toast.LENGTH_SHORT).show();
-            }
-        });
+
     }
 }
